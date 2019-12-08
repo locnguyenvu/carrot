@@ -20,4 +20,4 @@ Command: `./carrot settoken`
 
 ### Refund
 #### Tạo cho đơn hàng bị huỷ
-Command: `./carrot refund/create_for_canceled_order`
+Command: `./carrot refund/cfco`

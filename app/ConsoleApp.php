@@ -30,8 +30,16 @@ class ConsoleApp
         }
 
         $handlerTaskClass = static::$alias[$taskAlias] ?? null;
-        if (empty($handlerTaskClass)) {
-            throw new \Exception('No handler avaialable!');
+        if (is_null($handlerTaskClass)) {
+            $handlerTaskClass =  '\App\Task';
+            $taskPartenChunk = explode('/', $taskAlias);
+            foreach ($taskPartenChunk as $chunk) {
+                $handlerTaskClass .= '\\'.ucfirst(string_camelize($chunk));
+            }
+            $handlerTaskClass.= 'Task';
+            if (!class_exists($handlerTaskClass)) {
+                throw new \Exception('No Handler avaiable');
+            }
         }
 
         $handlerInnstance = new $handlerTaskClass;
