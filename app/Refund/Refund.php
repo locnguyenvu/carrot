@@ -2,11 +2,11 @@
 namespace App\Refund;
 
 use Carrot\Shared\Entity;
-use Carrot\Shared\EntityTraitMethod;
+use Carrot\Shared\EntityMethod;
 
 class Refund implements Entity
 {
-    use EntityTraitMethod;
+    use EntityMethod;
 
     protected $id;
     protected $code;

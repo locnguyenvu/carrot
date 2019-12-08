@@ -1,7 +1,7 @@
 <?php
 namespace Carrot\Shared;
 
-trait EntityTraitMethod
+trait EntityMethod
 {
     public function hydrate(array $params) : void
     {
