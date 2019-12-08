@@ -9,7 +9,7 @@ $ chmod +x ./carrot
 
 Tạo file `.env`
 ```
-OMS_DOMAIN="http://oms.tiki.local"
+OMS_DOMAIN="http://oms.tiki.domain"
 ```
 
 ## Hướng dẫn sử dụng
