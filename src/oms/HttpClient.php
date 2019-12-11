@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\{
 };
 use Psr\Http\Message\ResponseInterface;
 
-class ClientFacade
+class HttpClient
 {
     private $accessToken;
     private $client;

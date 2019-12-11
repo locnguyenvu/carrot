@@ -14,35 +14,37 @@ class ConsoleApp
     }
 
     public function handle(array $arguments) {
-        $handler = $this->getHandler($arguments[1] ?? '');
-        $handler->exec();
+        $task = $this->getTaskHandler($arguments[1] ?? '');
+        $taskArguments = array_slice($arguments, 2);
+        $task->readArguments($taskArguments);
+        $task->exec();
     }
 
-    private function getHandler(string $taskAlias) : Task\Task
+    private function getTaskHandler(string $taskAlias) : Task\Task
     {
         if (empty($taskAlias)) {
             return new Task\GuidelineTask;
         }
 
         if ($taskAlias == 'test' && class_exists(Task\TestTask::class)) {
-            $handlerInnstance = new Task\TestTask;
-            return $handlerInnstance;
+            $taskInstance = new Task\TestTask;
+            return $taskInstance;
         }
 
-        $handlerTaskClass = static::$alias[$taskAlias] ?? null;
-        if (is_null($handlerTaskClass)) {
-            $handlerTaskClass =  '\App\Task';
+        $taskHandlerClass = static::$alias[$taskAlias] ?? null;
+        if (is_null($taskHandlerClass)) {
+            $taskHandlerClass =  '\App\Task';
             $taskPartenChunk = explode('/', $taskAlias);
             foreach ($taskPartenChunk as $chunk) {
-                $handlerTaskClass .= '\\'.ucfirst(string_camelize($chunk));
+                $taskHandlerClass .= '\\'.ucfirst(string_camelize($chunk));
             }
-            $handlerTaskClass.= 'Task';
-            if (!class_exists($handlerTaskClass)) {
+            $taskHandlerClass.= 'Task';
+            if (!class_exists($taskHandlerClass)) {
                 throw new \Exception('No Handler avaiable');
             }
         }
 
-        $handlerInnstance = new $handlerTaskClass;
-        return $handlerInnstance;
+        $taskInstance = new $taskHandlerClass;
+        return $taskInstance;
     }
 }

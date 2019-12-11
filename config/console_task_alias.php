@@ -1,6 +1,6 @@
 <?php
 use App\Task;
 return [
-    'settoken' => Task\SetTokenTask::class,
-    'refund/cfco' => Task\Refund\CreateForCanceledOrderTask::class,
+    'stt' => Task\SetTokenTask::class,
+    'rcfco' => Task\Refund\CreateForCanceledOrderTask::class,
 ];

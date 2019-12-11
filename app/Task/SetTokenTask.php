@@ -1,7 +1,7 @@
 <?php
 namespace App\Task;
 
-class SetTokenTask implements Task
+class SetTokenTask extends AbstractTask implements Task
 {
     public function exec() : void
     {

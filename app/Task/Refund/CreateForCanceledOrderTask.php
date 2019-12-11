@@ -16,7 +16,11 @@ class CreateForCanceledOrderTask extends AbstractTask implements Task
 
     public function exec() : void
     {
-        $rawInput = readline("Các đơn hàng: ");
+        if ($this->hasArgument('orders')) {
+            $rawInput = $this->getArgument('orders');
+        } else {
+            $rawInput = readline("Mã các đơn hàng cách nhau bằng dầu phẩy: ");
+        }
 
         $orderCodes = array_filter(array_map('trim', explode(',', $rawInput)), 'is_numeric');
         foreach ($orderCodes as $orderCode) {

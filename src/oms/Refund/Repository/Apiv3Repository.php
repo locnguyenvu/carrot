@@ -1,7 +1,7 @@
 <?php
 namespace Oms\Refund\Repository;
 
-use Oms\ClientFacade;
+use Oms\HttpClient;
 use Oms\Exception\RuntimeException as OmsRuntimeException;
 use GuzzleHttp\Exception\{
     ClientException,
@@ -17,7 +17,7 @@ class Apiv3Repository implements Repository
     
     public function __construct()
     {
-        $this->omsClient = new ClientFacade([
+        $this->omsClient = new HttpClient([
             'base_uri' => static::BASE_URI
         ]);
     }
