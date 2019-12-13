@@ -1,6 +1,15 @@
 <?php
 use App\Task;
-return [
-    'stt' => Task\SetTokenTask::class,
-    'rcfco' => Task\Refund\CreateForCanceledOrderTask::class,
+$default =  [
+    'set_token' => Task\SetTokenTask::class,
+    'refund/create_for_canceled_order' => Task\Refund\CreateForCanceledOrderTask::class,
 ];
+
+if (file_exists(__DIR__.'/my_alias.php')) {
+    $personalConfig = require_once(__DIR__.'/my_alias.php');
+    $alias = array_merge($default, $personalConfig);
+} else {
+    $alias = $default;
+}
+
+return $alias;
