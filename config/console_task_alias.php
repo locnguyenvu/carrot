@@ -2,7 +2,11 @@
 use App\Task;
 $default =  [
     'set_token' => Task\SetTokenTask::class,
+    // Refund
     'refund/create_for_canceled_order' => Task\Refund\CreateForCanceledOrderTask::class,
+
+    // Reindex
+    'order/reindex' => Task\Order\ReindexTask::class,
 ];
 
 if (file_exists(__DIR__.'/my_alias.php')) {

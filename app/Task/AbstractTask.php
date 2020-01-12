@@ -1,12 +1,23 @@
 <?php
 namespace App\Task;
 
+use Carrot\Carrot;
+
 abstract class AbstractTask 
 {
     protected $arguments = [];
 
     public function __construct() {
         $this->initialize();
+
+        $description = $this->description();
+        if (!is_null($description)) {
+            Carrot::printWithColor($description, 'blue', true);
+        }
+    }
+
+    protected function description() {
+        return null;
     }
 
     protected function initialize()

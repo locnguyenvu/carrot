@@ -32,4 +32,14 @@ class Carrot
         }
         echo $colorConsole->apply(['green'], $content);
     }
+
+    /**
+     * Print console error with error
+     */
+    public static function printWithColor(string $message, string $color) : void
+    {
+        $colorConsole = new \JakubOnderka\PhpConsoleColor\ConsoleColor;
+        $content = sprintf("%s\n", $message);
+        echo $colorConsole->apply([$color], $content);
+    }
 }

@@ -1,17 +1,17 @@
 <?php
-namespace App\Task\Refund;
+namespace App\Task\Order;
 
 use App\Task\{AbstractTask, Task};
 use Oms\Exception\RuntimeException as OmsRuntimeException;
-use Oms\Refund\Repository\Apiv3Repository;
+use Oms\Order\Repository\Apiv3Repository;
 use Carrot\Carrot;
 
-class CreateForCanceledOrderTask extends AbstractTask implements Task
+class ReindexTask extends AbstractTask implements Task
 {
     private $repository;
 
     protected function description() {
-        return 'Tạo phiếu hoàn tiền cho đơn hàng huỷ';
+        return 'Reindex đơn hàng';
     }
 
     protected function initialize() {
@@ -28,21 +28,13 @@ class CreateForCanceledOrderTask extends AbstractTask implements Task
 
         $orderCodes = array_filter(array_map('trim', explode(',', $rawInput)), 'is_numeric');
         foreach ($orderCodes as $orderCode) {
-            printf("[%s] #%s", date('Y-m-d H:i:s'), $orderCode);
             try {
-                // Check existen
-                $existedRefund = $this->repository->findRefundByOrderCode($orderCode);
-                if (array_get($existedRefund, 'paging.total', 0) >= 1) {
-                    Carrot::printError("Refund has already exist");
-                    continue;
-                }
-                // Create
-                $refund = $this->repository->createForCanceledOrder($orderCode);
-                Carrot::printSuccess($refund['code']);
+                printf("[%s] #%s", date('Y-m-d H:i:s'), $orderCode);
+                $result = $this->repository->reindex($orderCode);
+                Carrot::printSuccess($result['success'] ? 'Success':'Done');
             } catch (OmsRuntimeException $e) {
                 continue;
             }
-            
         }
     }
 }
