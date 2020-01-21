@@ -21,3 +21,11 @@ Command: `./carrot settoken`
 ### Refund
 #### Tạo cho đơn hàng bị huỷ
 Command: `./carrot refund/cfco`
+
+
+### Order
+#### Reindex đơn hàng
+Command: `./carrot order/reindex`
+
+#### View đơn hàng
+Command: `./carrot order/view {orderCode}`

@@ -7,6 +7,7 @@ $default =  [
 
     // Reindex
     'order/reindex' => Task\Order\ReindexTask::class,
+    'order/view' => Task\Order\ViewTask::class,
 ];
 
 if (file_exists(__DIR__.'/my_alias.php')) {

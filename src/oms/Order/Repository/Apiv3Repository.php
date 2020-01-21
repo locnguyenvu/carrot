@@ -38,6 +38,23 @@ class Apiv3Repository implements Repository
         }
     }
 
+    public function get(string $orderCode) : array
+    {
+        try {
+            $response = $this->omsClient->get($orderCode);
+            $result = json_decode($response->getBody()->getContents(), true);
+            return $result;
+        } catch (ClientException $e) {
+            static::printOmsErrorMessage($e);
+            throw new OmsRuntimeException('Error');
+        } catch (ServerException $e) {
+            $response = $e->getResponse();
+            Carrot::printError($response->getBody()->getContents());
+            throw new OmsRuntimeException('Error');
+        }
+
+    }
+
     public static function printOmsErrorMessage(BadResponseException $e) : void 
     {
         $response = $e->getResponse();
