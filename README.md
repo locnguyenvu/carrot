@@ -29,3 +29,6 @@ Command: `./carrot order/reindex`
 
 #### View đơn hàng
 Command: `./carrot order/view {orderCode}`
+
+Combine with Command-line tool and terminal JSON viewer - [antonmedv/fx](https://github.com/antonmedv/fx)
+![](https://github.com/locnguyenvu/carrot/blob/master/docs/order-view-with-fx.gif)
