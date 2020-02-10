@@ -12,7 +12,9 @@
         "psr-4": {
             "App\\": "app/",
             "Carrot\\": "src/carrot",
-            "Oms\\": "src/oms"
+            "Oms\\": "src/oms",
+            "Authentication\\": "src/authentication",
+            "Tikivn\\": "src/tikivn"
         },
         "files": [
             "src/helper_functions.php"

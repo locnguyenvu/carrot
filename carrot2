@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+require_once('vendor/autoload.php');
+
+define('ROOT_PATH', __DIR__);
+define('APP_PATH', ROOT_PATH.'/app');
+define('CONFIG_PATH', ROOT_PATH.'/config');
+
+$dotenv = Dotenv\Dotenv::createImmutable(ROOT_PATH, '.env');
+$dotenv->load();
+
+$app = new \Carrot\Console\Application();
+
+// Access token
+$app->add(new \App\Console\AccessToken\SetCommand());
+
+// Order
+$app->add(new \App\Console\Order\ViewCommand());
+$app->add(new \App\Console\Order\BulkViewCommand());
+$app->add(new \App\Console\Order\BulkReindexCommand());
+
+$app->run();

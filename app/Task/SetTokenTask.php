@@ -7,7 +7,7 @@ class SetTokenTask extends AbstractTask implements Task
     {
         $line = readline("Token: ");
         
-        $accessTokenFile = ROOT_PATH.'/access_token';
+        $accessTokenFile = ROOT_PATH.'/'.getenv('TOKEN_FILE');
         // Clear
         file_put_contents($accessTokenFile, '');
 

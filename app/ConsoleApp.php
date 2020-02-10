@@ -3,6 +3,8 @@ namespace App;
 
 class ConsoleApp
 {
+    public static $di;
+
     public static $alias = [];
     public function __construct()
     {

@@ -18,6 +18,17 @@ if (!function_exists('array_get')) {
     }
 }
 
+if (!function_exists('carrot')) {
+    function carrot($service = null) {
+        if ($service == null) {
+            return \App\WebApp::$di;
+        } elseif (\App\WebApp::$di->has($service)) {
+            return \App\WebApp::$di->get($service);
+        }
+        return \App\WebApp::$di->create($service);
+    }
+}
+
 if (!function_exists('string_camelize')) {
     function string_camelize(string $snakeCase) : string {
         $chunks = explode('_', $snakeCase);

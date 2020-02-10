@@ -4,6 +4,7 @@ $default =  [
     'set_token' => Task\SetTokenTask::class,
     // Refund
     'refund/create_for_canceled_order' => Task\Refund\CreateForCanceledOrderTask::class,
+    'refund/list_by_order_code' => Task\Refund\ListByOrderCodeTask::class,
 
     // Reindex
     'order/reindex' => Task\Order\ReindexTask::class,

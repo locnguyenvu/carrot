@@ -40,6 +40,11 @@ abstract class AbstractTask
         return isset($this->arguments[$key]);
     }
 
+    public function hasArguments() : bool
+    {
+        return !empty($this->arguments);
+    }
+
     public function getArgument($key)
     {
         return $this->arguments[$key] ?? null;
