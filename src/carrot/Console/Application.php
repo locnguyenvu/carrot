@@ -14,6 +14,15 @@ class Application
     {
         $this->container = new \Carrot\Container();
         $this->localAliases = array_flip(include_once(CONFIG_PATH.'/local_aliases.php'));
+        $this->loadCommand();
+    }
+
+    private function loadCommand() {
+        $consoleBootstrapConfig = require_once(BOOTSTRAP_PATH.'/console.php');
+        $commands = array_get($consoleBootstrapConfig, 'commands');
+        foreach ($commands as $command) {
+            $this->add(new $command);
+        }
     }
 
     public function add(Command $command) : void

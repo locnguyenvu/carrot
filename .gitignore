@@ -11,3 +11,5 @@ crd2
 
 token/*
 config/local_aliases.php
+
+exports/*

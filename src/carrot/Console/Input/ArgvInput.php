@@ -64,7 +64,7 @@ class ArgvInput implements InputInterface
     {
         list($key, $value) = explode('=', $stringPattern);
         
-        $this->options[$key] = empty($value) ? false : $value;
+        $this->options[$key] = empty($value) ? true : $value;
     }
 
     public function getArgumentByIndex(int $i) {
@@ -76,12 +76,12 @@ class ArgvInput implements InputInterface
         return $this->arguments;
     }
 
-    public function getOption($key) {
-        if (!preg_match('/^\-\-.*/', $key)) {
-            $opitonName = '--'.$key;
-        } else {
-            $optionName = $key;
-        }
-        return $this->options[$key] ?? false;
+    public function getOption($key, $default = null) {
+        return $this->options[$key] ?? $default;
+    }
+
+    public function hasOption($key) : bool
+    {
+        return isset($this->options[$key]);
     }
 }

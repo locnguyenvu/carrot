@@ -28,9 +28,14 @@ class Parser
         $this->argvInput = $input;
     }
 
-    public function getOption($key) : ?string
+    public function getOption($name, $default = null)
     {
-        return $this->argvInput->getOption($key);
+        return $this->argvInput->getOption(static::formatOptionName($name), $default);
+    }
+
+    public function hasOption($name) : bool
+    {
+        return $this->argvInput->hasOption(static::formatOptionName($name));
     }
 
     public function getName() : string
@@ -49,5 +54,15 @@ class Parser
         }
 
         return $args;
+    }
+
+    public static function formatOptionName($name) : string
+    {
+        if (!preg_match('/^\-\-.*/', $name)) {
+            $optionName = '--'.$name;
+        } else {
+            $optionName = $name;
+        }
+        return $optionName;
     }
 }

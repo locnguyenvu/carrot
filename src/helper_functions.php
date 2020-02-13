@@ -50,3 +50,14 @@ if (!function_exists('string_snakelize')) {
         ));
     }
 }
+
+if (!function_exists('app')) {
+    function app(string $service) {
+        if ($service == null) {
+            return \Carrot\Container::$di;
+        } elseif (\Carrot\Container::$di->has($service)) {
+            return \Carrot\Container::$di->get($service);
+        }
+        return \Carrot\Container::$di->create($service);
+    }
+}

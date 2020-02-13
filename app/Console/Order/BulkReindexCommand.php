@@ -5,7 +5,7 @@ use Tikivn\Oms\Order\Model\Order;
 
 class BulkReindexCommand extends \Carrot\Console\Command
 {
-    protected static $pattern = 'order:bulk-reindex {codes}';
+    protected static $pattern = 'order:bulk-reindex {codes} {--exportJson}';
 
     public function exec($codes) {
         $codes = array_map('trim', explode(',', $codes));
@@ -16,12 +16,19 @@ class BulkReindexCommand extends \Carrot\Console\Command
         foreach ($codes as $code) {
             try {
                 $repository->reindex($code);
-                $result[$code] = 'Success';
+                printf("[%s] #%s - %s\n", date('Y-m-d H:i:s'), $code, app('console_color')->apply(['green'], 'Success'));
+                $this->result[] = [
+                    'code' => $code,
+                    'status' => 'OK'
+                ];
             } catch (\Tikivn\Exception\ToleranceException $toleranceException) {
-                $result[$code] = 'Failed';
+                printf("[%s] #%s - %s\n", date('Y-m-d H:i:s'), $code, app('console_color')->apply(['red'], 'Failed'));
+                $this->result[] = [
+                    'code' => $code,
+                    'status' => 'Failed',
+                    'errors' => $toleranceException->getMessage()
+                ];
             }
         }
-
-        echo json_encode($result, JSON_PRETTY_PRINT);
     }
 }

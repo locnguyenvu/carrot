@@ -14,6 +14,5 @@ return [
         'orderRepository' => [
             'class' => \Tikivn\Oms\Order\Repository::class
         ]
-    ],
-    'console_namespace' => 'App\\Console\\',
+        ],
 ];

@@ -12,7 +12,7 @@ class CollectionOrder extends \Carrot\Common\CollectionModel
     {
         $jsonArray = [];
         foreach ($this->_data as $order) {
-            $jsonArray[$order->getCode()] = $order->toArray();
+            $jsonArray[] = $order->toArray();
         }
         return json_encode($jsonArray, $beautify ? JSON_PRETTY_PRINT : 0);
     }

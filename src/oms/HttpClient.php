@@ -34,7 +34,7 @@ class HttpClient
 
     private function loadAccessToken() : void
     {
-        $this->accessToken = file_get_contents(ROOT_PATH.'/access_token');
+        $this->accessToken = file_get_contents(ROOT_PATH.'/'.getenv('TOKEN_FILE'));
     }
 
     public function get(string $uri) : ResponseInterface
