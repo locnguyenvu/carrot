@@ -26,7 +26,7 @@ class CollectionModel implements \IteratorAggregate, \Countable
     }
 
     public function getIterator() {
-        return $this->_data;
+        return new \ArrayIterator($this->_data);
     }
 
     public function append(Model $model) {
@@ -46,5 +46,12 @@ class CollectionModel implements \IteratorAggregate, \Countable
     public function toArray() : array
     {
         return array_map(function($model) { return $model->toArray(); }, $this->_data);
+    }
+
+    public function join(CollectionModel $collection) : void
+    {
+        foreach ($collection as $c) {
+            $this->append($c);
+        }
     }
 }

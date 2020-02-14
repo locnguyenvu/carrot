@@ -13,6 +13,9 @@ return [
         ],
         'orderRepository' => [
             'class' => \Tikivn\Oms\Order\Repository::class
-        ]
         ],
+        'refundRepository' => [
+            'class' => \Tikivn\Oms\Refund\Repository::class
+        ]
+    ],
 ];

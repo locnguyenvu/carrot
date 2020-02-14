@@ -9,5 +9,9 @@ return [
         \App\Console\Order\BulkViewCommand::class,
         \App\Console\Order\BulkReindexCommand::class,
         \App\Console\Order\BulkChangeStatusCommand::class,
+        \App\Console\Order\ListEventCommand::class,
+
+        // Refund
+        \App\Console\Refund\CreateForCaneledOrderCommand::class,
     ]
 ];

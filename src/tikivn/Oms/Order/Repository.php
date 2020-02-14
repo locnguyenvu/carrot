@@ -2,7 +2,7 @@
 namespace Tikivn\Oms\Order;
 
 use Tikivn\Oms\HttpClient as OmsClient;
-use Tikivn\Oms\Order\Model\{Order, CollectionOrder};
+use Tikivn\Oms\Order\Model\{Order, CollectionOrder, CollectionOrderEvent};
 
 use GuzzleHttp\Exception\{
     ClientException,
@@ -81,6 +81,20 @@ class Repository
                 throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
             }
             throw new \Tikivn\Exception\ToleranceException($e->getMessage);
+        }
+    }
+
+    public function getEvents(string $code) : CollectionOrderEvent
+    {
+        try {
+            $response = $this->omsClient->get("/v3/orders/{$code}/manage/events");
+            $result = json_decode($response->getBody()->getContents(), true);
+            return CollectionOrderEvent::hydrate($result);
+        } catch (BadResponseException $e) {
+            if (in_array($e->getCode(), [401, 500, 503])) {
+                throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
+            }
+            throw new \Tikivn\Exception\ToleranceException($e->getMessage());
         }
     }
 }

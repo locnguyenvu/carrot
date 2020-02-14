@@ -19,7 +19,7 @@ class Model
     }
 
     public function getProperty($key) {
-        return $this->_properties[$key] ?? null;
+        return array_get($this->_properties, $key);
     }
 
     public function getAllProperties() : array

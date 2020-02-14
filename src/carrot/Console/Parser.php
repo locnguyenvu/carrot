@@ -16,10 +16,14 @@ class Parser
 
         $this->name = array_shift($elements);
         foreach ($elements as $argument) {
-            if (!preg_match('/\{.*\}/', $argument) || !preg_match('/\{\-{2}.*\}/', $argument)) continue;
-            else {
-                $this->arguments[trim(str_replace(['{', '}'], '', $argument))] = null;
+            if (!preg_match('/\{.*\}/', $argument)) continue;
+
+            $argumentName = trim(str_replace(['{', '}'], '', $argument));
+            if (preg_match('/^[^\-].*/', $argumentName)) {
+                $this->arguments[] = $argumentName;
+                continue;
             }
+            
         }
     }
 
@@ -47,13 +51,15 @@ class Parser
     {
         $inputArgs = $this->argvInput->getArguments();
         array_shift($inputArgs); // Remove command name
-        $args = [];
-        foreach($inputArgs as $arg) {
-            if ($arg == $this->name) continue;
-            $args[] = $arg;
+
+        for ($i = 0; $i < count($this->arguments); $i++) {
+            if (isset($inputArgs[$i])) {
+                continue;
+            }
+            $inputArgs[] = readline("{$this->arguments[$i]}: ");
         }
 
-        return $args;
+        return $inputArgs;
     }
 
     public static function formatOptionName($name) : string
