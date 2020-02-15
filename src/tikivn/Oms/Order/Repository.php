@@ -55,16 +55,9 @@ class Repository
 
     public function reindex(string $code) : array
     {
-        try {
-            $response = $this->omsClient->post("/v3/orders/{$code}/manage/reindex", []);
-            $result = json_decode($response->getBody()->getContents(), true);
-            return $result;
-        } catch (BadResponseException $e) {
-            if (in_array($e->getCode(), [401, 500, 503])) {
-                throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
-            }
-            throw new \Tikivn\Exception\ToleranceException($e->getMessage);
-        }
+        $response = $this->omsClient->post("/v3/orders/{$code}/manage/reindex", []);
+        $result = json_decode($response->getBody()->getContents(), true);
+        return $result;
     }
 
     public function changeStatus(string $code, string $status, string $comment) : array

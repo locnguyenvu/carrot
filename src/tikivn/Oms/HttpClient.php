@@ -4,10 +4,12 @@ namespace Tikivn\Oms;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\{
     ClientException,
-    ServerException
+    ServerException,
+    BadResponseException
 };
 use Psr\Http\Message\ResponseInterface;
 use Tikivn\Authentication\AccessToken;
+use Tikivn\Exception\Factory as ExceptionFactory;
 
 class HttpClient
 {
@@ -41,16 +43,24 @@ class HttpClient
 
     public function get(string $uri) : ResponseInterface
     {
-        $response = $this->client->get($uri);
-        return $response;
+        try {
+            $response = $this->client->get($uri);
+            return $response;
+        } catch (BadResponseException $e) {
+            throw ExceptionFactory::make($e);
+        }
      
     }
 
     public function post(string $uri, array $params) : ResponseInterface
     {
-        $response = $this->client->post($uri, [
-            'json' => $params
-        ]);
-        return $response;
+        try {
+            $response = $this->client->post($uri, [
+                'json' => $params
+            ]);
+            return $response;
+        } catch (BadResponseException $e) {
+            throw ExceptionFactory::make($e);
+        }
     }
 }

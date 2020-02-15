@@ -1,6 +1,8 @@
 <?php
 namespace Carrot\Console;
 
+use Carrot\Exception as CarrotException;
+
 class Application
 {
     public $commands = [];
@@ -52,8 +54,8 @@ class Application
         $handler = $this->commands[$commandName];
         try {
             $handler->run($argvInput);
-        } catch (\Tikivn\Exception\ApiException $e) {
-            echo json_encode($e->getDetailAsArray(), JSON_PRETTY_PRINT);
+        } catch (CarrotException\Http\HttpException $e) {
+            echo $e->getMessage();
         }
     }
 
