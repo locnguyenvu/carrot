@@ -6,7 +6,7 @@ use Tikivn\Oms\Order\Model\Order;
 
 class BulkReindexCommand extends \Carrot\Console\Command
 {
-    protected static $pattern = 'order:bulk-reindex {codes} {--exportJson}';
+    protected static $pattern = 'order:bulk-reindex {codes}';
 
     private $orderRepository;
 

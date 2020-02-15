@@ -6,7 +6,7 @@ use Carrot\Exception\Http\{BadRequestException};
 
 class ViewCommand extends \Carrot\Console\Command
 {
-    protected static $pattern = 'refund:view {refundId} {--exportJson}';
+    protected static $pattern = 'refund:view {refundId}';
 
     private $refundRepository;
 

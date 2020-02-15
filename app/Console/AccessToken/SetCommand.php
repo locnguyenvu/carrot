@@ -6,12 +6,10 @@ use Carrot\Console\Input\InputInterface;
 
 class SetCommand extends Command {
 
-    protected static $pattern = 'accessToken:set';
+    protected static $pattern = 'accessToken:set {token}';
 
     public function exec()
     {
-        $jwt = $line = readline("Token JWT: ");
-
         $accessToken = $this->app->getService('access_token');
         $accessToken->setJwt($jwt);
     }

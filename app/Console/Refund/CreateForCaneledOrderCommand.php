@@ -6,7 +6,7 @@ use Carrot\Exception\Http\{BadRequestException};
 
 class CreateForCaneledOrderCommand extends \Carrot\Console\Command
 {
-    protected static $pattern = 'refund:create-for-caneled-order {orderCodes} {--exportJson}';
+    protected static $pattern = 'refund:create-for-caneled-order {orderCodes}';
 
     private $refundRepository;
 

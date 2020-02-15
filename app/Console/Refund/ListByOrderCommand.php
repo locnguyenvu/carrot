@@ -6,7 +6,7 @@ use Carrot\Exception\Http\{BadRequestException};
 
 class ListByOrderCommand extends \Carrot\Console\Command
 {
-    protected static $pattern = 'refund:view-byorder {orderCode} {--exportJson}';
+    protected static $pattern = 'refund:view-byorder {orderCode}';
 
     private $refundRepository;
 

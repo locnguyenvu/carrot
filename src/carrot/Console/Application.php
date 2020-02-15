@@ -34,7 +34,6 @@ class Application
         $name = $command->getName();
         $this->commands[$name] = $command;
 
-        $commandClassPath = get_class($command);
         if (array_key_exists($name, $this->localAliases)) {
             $commandAlias = $this->localAliases[$name];
             $this->commands[$commandAlias] = $command;
@@ -46,6 +45,11 @@ class Application
         $argvInput = new Input\ArgvInput();
 
         $commandName = $argvInput->getFirstArgument();
+        if ($commandName === null) {
+            $manual = new ManualRender($this->commands);
+            $manual->render();
+            return;
+        }
 
         if (!array_key_exists($commandName, $this->commands)) {
             throw new \Carrot\Exception\InvalidCommandException();
@@ -67,6 +71,14 @@ class Application
     public function getService(string $key)
     {
         return $this->container::$di->get($key);
+    }
+
+    private function printHelper()
+    {
+        foreach ($this->commands as $key => $command) {
+            if ($key != $command->getName()) continue;
+            echo app('console_color')->apply(['yellow'], $command->getName()).'>>>'.$command->getPattern().PHP_EOL;
+        }
     }
 
 }

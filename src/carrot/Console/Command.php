@@ -18,6 +18,10 @@ class Command
 
     protected function init() : void {}
 
+    public function getPattern() {
+        return static::$pattern;
+    }
+
     public function setApplication(Application $app) : void
     {
         $this->app = $app;
