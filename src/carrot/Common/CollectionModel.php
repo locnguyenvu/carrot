@@ -7,7 +7,9 @@ class CollectionModel implements \IteratorAggregate, \Countable
 
     protected function model() : string
     {
-        return Model::class;
+        $className = get_class($this);
+        return \str_replace('Collection', '', $className);
+        return $className;
     }
 
     public static function hydrate(array $dataArray) {

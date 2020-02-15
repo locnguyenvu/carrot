@@ -13,5 +13,7 @@ return [
 
         // Refund
         \App\Console\Refund\CreateForCaneledOrderCommand::class,
+        \App\Console\Refund\ListByOrderCommand::class,
+        \App\Console\Refund\ViewCommand::class,
     ]
 ];

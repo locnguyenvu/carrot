@@ -49,7 +49,6 @@ class HttpClient
         } catch (BadResponseException $e) {
             throw ExceptionFactory::make($e);
         }
-     
     }
 
     public function post(string $uri, array $params) : ResponseInterface

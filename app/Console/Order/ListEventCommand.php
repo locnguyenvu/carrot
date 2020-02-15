@@ -8,9 +8,15 @@ class ListEventCommand extends \Carrot\Console\Command
 {
     protected static $pattern = 'order:list-event {code}';
 
+    private $orderRepository;
+
+    protected function init() : void
+    {
+        $this->orderRepository = app('orderRepository');
+    }
+
     public function exec($code) {
-        $repository = $this->app->getService('orderRepository');
-        $collectionOrderEvent = $repository->getEvents($code);
+        $collectionOrderEvent = $this->orderRepository->getEvents($code);
         
         self::printTable($collectionOrderEvent);
     }

@@ -1,13 +1,7 @@
 .env
-access_token
 vendor/*
-app/Task/Test*.php
-carrotdev
 cr
 crd
-
-cr2
-crd2
 
 token/*
 config/local_aliases.php

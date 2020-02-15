@@ -21,21 +21,21 @@ class CreateForCaneledOrderCommand extends \Carrot\Console\Command
             $messageHeader = \sprintf("[%s] #%s", date('Y-m-d H:i:s'), $code);
             try {
                 $refundOrder = $this->refundRepository->createForCanceledOrder($code);
-                echo $messageHeader.' '.app('console_color')->apply(['green'], 'Success').PHP_EOL.$refundOrder->toJson().PHP_EOL;
+                echo $messageHeader.' '.app('console_color')->apply(['green'], 'Success').PHP_EOL.$refundOrder->toJson();
                 $this->result[] = [
                     'order' => $code,
                     'status' => 'Success',
                     'response' => $refundOrder->toArray()
                 ];
             } catch (BadRequestException $e) {
-                echo $messageHeader.' '.$e->getMessage().PHP_EOL; 
+                echo $messageHeader.' '.$e->getMessage(); 
                 $this->result[] = [
                     'order' => $code,
                     'status' => 'Failed',
                     'response' => $e->getMessageAsArray()
-                ];    
-                continue;
+                ];
             }
+            echo PHP_EOL;
         }
     }
 }

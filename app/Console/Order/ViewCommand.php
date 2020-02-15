@@ -7,9 +7,15 @@ class ViewCommand extends \Carrot\Console\Command
 {
     protected static $pattern = 'order:view {code}';
 
+    private $orderRepository;
+
+    protected function init() : void
+    {
+        $this->orderRepository = app('orderRepository');
+    }
+
     public function exec($code) {
-        $repository = $this->app->getService('orderRepository');
-        $order = $repository->findByCode($code);
+        $order = $this->orderRepository->findByCode($code);
         echo $order->toJson();
     }
 }

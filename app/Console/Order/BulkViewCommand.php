@@ -7,12 +7,16 @@ class BulkViewCommand extends \Carrot\Console\Command
 {
     protected static $pattern = 'order:bulk-view {codes}';
 
+    private $orderRepository;
+
+    protected function init() : void
+    {
+        $this->orderRepository = app('orderRepository');
+    }
+
     public function exec($codes) {
         $codes = array_map('trim', explode(',', $codes));
-        $repository = $this->app->getService('orderRepository');
-
-        $collectionOrder = $repository->findInCodes($codes);
-
+        $collectionOrder = $this->repository->findInCodes($codes);
         echo $collectionOrder->toJson();
     }
 }

@@ -20,22 +20,17 @@ class Repository
 
     public function findByCode(string $code) : Order
     {
-        try {
-            $response = $this->omsClient->get('/v3/orders/' . $code);
-            $result = json_decode($response->getBody()->getContents(), true);
-            $order = new Order();
-            $order->assign($result['order'] ?? []);
-            return $order;
-        } catch (BadResponseException $e) {
-            throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
-        }
+        $response = $this->omsClient->get('/v3/orders/' . $code);
+        $result = json_decode($response->getBody()->getContents(), true);
+        $order = new Order();
+        $order->assign($result['order'] ?? []);
+        return $order;
     }
 
     public function findInCodes(array $codes) : CollectionOrder
     {
         $collection = new CollectionOrder;
         foreach ($codes as $code) {
-            try {
                 $response = $this->omsClient->get('/v3/orders/' . $code);
                 $result = json_decode($response->getBody()->getContents(), true);
                 $order = new Order();
@@ -43,12 +38,6 @@ class Repository
 
                 $collection->append($order);
                 unset($order);
-            } catch (BadResponseException $e) {
-                if (in_array($e->getCode(), [401, 500, 503])) {
-                    throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
-                }
-                continue;
-            }
         }
         return $collection;
     }
@@ -62,32 +51,18 @@ class Repository
 
     public function changeStatus(string $code, string $status, string $comment) : array
     {
-        try {
-            $response = $this->omsClient->post("/v3/orders/{$code}/change_status", [
-                'status' => $status,
-                'comment' => $comment
-            ]);
-            $result = json_decode($response->getBody()->getContents(), true);
-            return $result;
-        } catch (BadResponseException $e) {
-            if (in_array($e->getCode(), [401, 500, 503])) {
-                throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
-            }
-            throw new \Tikivn\Exception\ToleranceException($e->getMessage);
-        }
+        $response = $this->omsClient->post("/v3/orders/{$code}/change_status", [
+            'status' => $status,
+            'comment' => $comment
+        ]);
+        $result = json_decode($response->getBody()->getContents(), true);
+        return $result;
     }
 
     public function getEvents(string $code) : CollectionOrderEvent
     {
-        try {
-            $response = $this->omsClient->get("/v3/orders/{$code}/manage/events");
-            $result = json_decode($response->getBody()->getContents(), true);
-            return CollectionOrderEvent::hydrate($result);
-        } catch (BadResponseException $e) {
-            if (in_array($e->getCode(), [401, 500, 503])) {
-                throw new \Tikivn\Exception\ApiException($e->getMessage(), $e->getCode(), $e);
-            }
-            throw new \Tikivn\Exception\ToleranceException($e->getMessage());
-        }
+        $response = $this->omsClient->get("/v3/orders/{$code}/manage/events");
+        $result = json_decode($response->getBody()->getContents(), true);
+        return CollectionOrderEvent::hydrate($result);
     }
 }
