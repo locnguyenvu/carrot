@@ -42,7 +42,7 @@ class Command
         $this->parser->setArgvInput($argvInput);
         \call_user_func_array([$this, 'exec'], $this->parser->getArguments());
 
-        if ($this->getOption('exportJson')) {
+        if ($this->getOption('exportJson') && !empty($this->result)) {
             $exportFilePath = ROOT_PATH.'/exports/'.$this->getExportJsonName();
             \file_put_contents($exportFilePath, json_encode($this->result, JSON_PRETTY_PRINT));
 

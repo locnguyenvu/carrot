@@ -8,7 +8,7 @@ class SetCommand extends Command {
 
     protected static $pattern = 'accessToken:set {token}';
 
-    public function exec()
+    public function exec($jwt)
     {
         $accessToken = $this->app->getService('access_token');
         $accessToken->setJwt($jwt);
