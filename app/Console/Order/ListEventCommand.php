@@ -19,6 +19,16 @@ class ListEventCommand extends \Carrot\Console\Command
         $collectionOrderEvent = $this->orderRepository->getEvents($code);
         
         self::printTable($collectionOrderEvent);
+
+        do {
+            $command = readline("\nEventID> ");
+            $event = $collectionOrderEvent->getEvent($command);
+            if (is_null($event)) {
+                return;
+            }
+            echo $event->toJson().PHP_EOL;
+            self::printTable($collectionOrderEvent);
+        } while ($command != 'exit');
     }
 
     public static function printTable($collectionOrderEvent) {

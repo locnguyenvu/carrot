@@ -7,4 +7,14 @@ class CollectionOrderEvent extends \Carrot\Common\CollectionModel
     {
         return OrderEvent::class;
     }
+
+    public function getEvent(string $eventId) : ?OrderEvent
+    {
+        foreach ($this->_data as $event) {
+            if ($event->getRequestId() == $eventId) {
+                return $event;
+            }
+        }
+        return null;
+    }
 }

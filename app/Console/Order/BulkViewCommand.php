@@ -16,7 +16,7 @@ class BulkViewCommand extends \Carrot\Console\Command
 
     public function exec($codes) {
         $codes = array_map('trim', explode(',', $codes));
-        $collectionOrder = $this->repository->findInCodes($codes);
+        $collectionOrder = $this->orderRepository->findInCodes($codes);
         echo $collectionOrder->toJson();
     }
 }
