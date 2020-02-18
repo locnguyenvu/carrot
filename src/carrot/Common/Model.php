@@ -27,8 +27,17 @@ class Model
         return $this->_properties;
     }
 
-    public function toArray() {
-        return $this->_properties;
+    public function toArray() : array
+    {
+        $dataArray = [];
+        foreach ($this->_properties as $key => $value) {
+            if ($value instanceof CollectionModel) {
+                $dataArray[$key] = $value->toArray();
+                continue;
+            }
+            $dataArray[$key] = $value;
+        }
+        return $dataArray;
     }
 
     public function toJson($beautify = true)

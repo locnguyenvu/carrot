@@ -35,7 +35,6 @@ class Repository
                 $result = json_decode($response->getBody()->getContents(), true);
                 $order = new Order();
                 $order->assign($result['order'] ?? []);
-
                 $collection->append($order);
                 unset($order);
         }
