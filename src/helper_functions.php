@@ -18,6 +18,35 @@ if (!function_exists('array_get')) {
     }
 }
 
+if (!function_exists('array_generate')) {
+    function array_generate(string $keyStructure, $value = null) 
+    {
+        $dotPos = strpos($keyStructure, '.');
+        if ($dotPos > 0) {
+            return [substr($keyStructure, 0, $dotPos) => array_generate(substr($keyStructure, $dotPos + 1), $value)];
+        }
+        else return [$keyStructure => $value];
+    }
+}
+if (!function_exists('array_set')) {
+    function array_set(&$source, $path, $value) {
+        $keys = explode('.', $path);
+        $tracker = &$source;
+
+        do {
+            $key = array_shift($keys);
+            if (!array_key_exists($key, $tracker ?? [])) {
+                $tracker[$key] = array_generate(implode('.', $keys), $value);
+            }
+            $tracker = &$tracker[$key];
+        } while(count($keys) >= 1);
+
+        if ($tracker[$key] !== $value) {
+            $tracker = $value;
+        }
+    }
+}
+
 if (!function_exists('string_camelize')) {
     function string_camelize(string $snakeCase) : string {
         $chunks = explode('_', $snakeCase);

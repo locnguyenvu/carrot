@@ -50,7 +50,7 @@ class ModelToArrayTransformer
         }
 
         if (empty($fields)) return $source;
-
+        
         $result = [];
         foreach ($fields as $field) {
 
@@ -59,8 +59,23 @@ class ModelToArrayTransformer
                 continue;
             }
 
-            $result[$field] = array_get($source, $field);
+            if (\preg_match('/\[\]\./', $field)) {
+                list($collectionKey, $collectionItemfield) = explode('[].', $field);
+                if (!array_key_exists($collectionKey, $source) || !is_array($source[$collectionKey])) {
+                    continue;
+                }
+                if (!array_key_exists($collectionKey, $result)) {
+                    $result[$collectionKey] = [];
+                }
+                foreach ($source[$collectionKey] as $index => $collectionItem) {
+                    $tmp = $result[$collectionKey][$index] ?? [];
+                    array_set($tmp, $collectionItemfield, array_get($collectionItem, $collectionItemfield));
+                    $result[$collectionKey][$index] = $tmp;
+                }
+                continue;
+            }
 
+            array_set($result, $field, array_get($source, $field));
         }
         return $result;
     }
