@@ -35,6 +35,10 @@ class Model
                 $dataArray[$key] = $value->toArray();
                 continue;
             }
+            if ($value instanceof Model) {
+                $dataArray[$key] = $value->toArray();
+                continue;
+            }
             $dataArray[$key] = $value;
         }
         return $dataArray;

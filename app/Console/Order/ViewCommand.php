@@ -16,6 +16,15 @@ class ViewCommand extends \Carrot\Console\Command
 
     public function exec($code) {
         $order = $this->orderRepository->findByCode($code);
-        echo $order->toJson();
+        
+        $transformer = new \Carrot\Common\ModelToArrayTransformer($order);
+
+        if ($this->hasOption('filterFields')) {
+            $filterFields = explode(',', $this->getOption('filterFields', ''));
+            echo json_encode($transformer->filterFields($filterFields), JSON_PRETTY_PRINT);
+            return;
+        }
+
+        echo json_encode($transformer->transform(), JSON_PRETTY_PRINT);
     }
 }
