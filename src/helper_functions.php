@@ -41,7 +41,7 @@ if (!function_exists('array_set')) {
             $tracker = &$tracker[$key];
         } while(count($keys) >= 1);
 
-        if ($tracker[$key] !== $value) {
+        if ($tracker !== $value) {
             $tracker = $value;
         }
     }

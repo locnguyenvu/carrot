@@ -2,6 +2,7 @@
 namespace App\Console\Refund;
 
 use Tikivn\Oms\Refund\Model\{RefundOrder, CollectionRefundOrder};
+use Carrot\Common\ModelToJsonTransformer;
 use Carrot\Exception\Http\{BadRequestException};
 
 class ViewCommand extends \Carrot\Console\Command
@@ -16,6 +17,14 @@ class ViewCommand extends \Carrot\Console\Command
 
     public function exec($refundId) {
         $refund = $this->refundRepository->find($refundId);
-        echo $refund->toJson();
+
+        $transformer = new ModelToJsonTransformer;
+        if ($this->hasOption('filterFields')) {
+            $visibleFields = array_map('trim', explode(',',$this->getOption('filterFields')));
+            $transformer->setVisibleFields($visibleFields);
+        }
+
+        echo $transformer->transform($refund);
+        return;
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Console\Order;
 
 use Tikivn\Oms\Order\Model\Order;
+use Carrot\Common\{ModelToJsonTransformer};
 
 class ViewCommand extends \Carrot\Console\Command
 {
@@ -17,14 +18,12 @@ class ViewCommand extends \Carrot\Console\Command
     public function exec($code) {
         $order = $this->orderRepository->findByCode($code);
         
-        $transformer = new \Carrot\Common\ModelToArrayTransformer($order);
-
+        $transformer = new ModelToJsonTransformer();
         if ($this->hasOption('filterFields')) {
-            $filterFields = explode(',', $this->getOption('filterFields', ''));
-            echo json_encode($transformer->filterFields($filterFields), JSON_PRETTY_PRINT);
-            return;
+            $filterFields = array_map('trim', explode(',', $this->getOption('filterFields', '')));
+            $transformer->setVisibleFields($filterFields);
         }
-
-        echo json_encode($transformer->transform(), JSON_PRETTY_PRINT);
+        echo $transformer->transform($order);
+        return;
     }
 }

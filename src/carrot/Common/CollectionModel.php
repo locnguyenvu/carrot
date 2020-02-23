@@ -39,17 +39,6 @@ class CollectionModel implements \IteratorAggregate, \Countable
         return count($this->_data);
     }
 
-    public function toJson($beautify = true)
-    {
-        $jsonArray = array_map(function($model) { return $model->toArray(); }, $this->_data);
-        return json_encode($jsonArray, $beautify ? JSON_PRETTY_PRINT : 0);
-    }
-
-    public function toArray() : array
-    {
-        return array_map(function($model) { return $model->toArray(); }, $this->_data);
-    }
-
     public function join(CollectionModel $collection) : void
     {
         foreach ($collection as $c) {

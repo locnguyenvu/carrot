@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Order;
 
-use Carrot\Common\{Model, CollectionModel};
+use Carrot\Common\{Model, CollectionModel, ModelToArrayTransformer, ModelToJsonTransformer};
 use LucidFrame\Console\ConsoleTable;
 use Tikivn\Oms\Order\Model\{Order, CollectionOrderEvent};
 
@@ -18,32 +18,35 @@ class ListEventCommand extends \Carrot\Console\Command
 
     public function exec($code) {
         $collectionOrderEvent = $this->orderRepository->getEvents($code);
-        
-        $this->printTable($collectionOrderEvent);
 
+        if ($this->hasOption('trackFields')) {
+            $trackFields = explode(',', $this->getOption('trackFields'));
+            return $this->printTrackFields($trackFields, $collectionOrderEvent);
+        }
+        
+        $this->printOverviewTable($collectionOrderEvent);
+
+        if (!$this->hasOption('detail')) {
+            return;
+        }
         do {
             $command = readline("\n>> ");
-
             list($action, $param) = explode(' ', $command);
             switch($action) {
-                case 'trackField':
-                    $trackFields = explode(',', $param);
-                    $this->printTrackFields($trackFields, $collectionOrderEvent);
-                    break;
-                case 'tf':
-                    $trackFields = explode(',', $param);
-                    $this->printTrackFields($trackFields, $collectionOrderEvent);
-                    break;
                 case 'exit':
                     break;
+                case 'list':
+                    $this->printOverviewTable($collectionOrderEvent);
+                    break;
                 default: 
-                    $this->printEventById($action, $collectionOrderEvent);
+                    $filterFields = empty($param) ? [] : explode(',', $param);
+                    $this->printEventById($action, $collectionOrderEvent, $filterFields);
                     break;
             }
         } while ($command != 'exit');
     }
 
-    protected function printTable($collectionOrderEvent) {
+    protected function printOverviewTable($collectionOrderEvent) {
         $table = new ConsoleTable();
         $table->addHeader('event_id')
             ->addHeader('timestamp')
@@ -59,9 +62,14 @@ class ListEventCommand extends \Carrot\Console\Command
         $table->display();
     }
 
-    protected function printEventById(string $uuid, CollectionOrderEvent $collectionOrderEvent) {
+    protected function printEventById(string $uuid, CollectionOrderEvent $collectionOrderEvent, array $filterFields = []) {
         $event = $collectionOrderEvent->getEvent($uuid);
-        echo $event->toJson();
+        $transformer = new ModelToJsonTransformer();
+        $order = $event->getOrder();
+        if (!empty($filterFields)) {
+            $transformer->setVisibleFields($filterFields);
+        }
+        echo $transformer->transform($order);
     }
 
     protected function printTrackFields(array $trackFields, CollectionOrderEvent $collectionOrderEvent) {
@@ -73,9 +81,9 @@ class ListEventCommand extends \Carrot\Console\Command
                 app('console_color')->apply(['bold', 'light_blue'], $event->getAction())
             ]).PHP_EOL;
             $order = $event->getOrder();
-            $transformer = new \Carrot\Common\ModelToArrayTransformer($order);
-            echo json_encode($transformer->filterFields($trackFields), JSON_PRETTY_PRINT);
-            echo PHP_EOL;
+            $transformer = new \Carrot\Common\ModelToJsonTransformer();
+            $transformer->setVisibleFields($trackFields);
+            echo $transformer->transform($order).PHP_EOL;
         }
     }
 }

@@ -46,7 +46,7 @@ class Command
             $exportFilePath = ROOT_PATH.'/exports/'.$this->getExportJsonName();
             \file_put_contents($exportFilePath, json_encode($this->result, JSON_PRETTY_PRINT));
 
-            echo "\n\nExpot file: {$exportFilePath}";
+            echo "\n\nExpot file: \n{$exportFilePath}";
         }
     }
 

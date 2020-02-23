@@ -26,39 +26,4 @@ class Model
     {
         return $this->_properties;
     }
-
-    public function toArray() : array
-    {
-        $dataArray = [];
-        foreach ($this->_properties as $key => $value) {
-            if ($value instanceof CollectionModel) {
-                $dataArray[$key] = $value->toArray();
-                continue;
-            }
-            if ($value instanceof Model) {
-                $dataArray[$key] = $value->toArray();
-                continue;
-            }
-            $dataArray[$key] = $value;
-        }
-        return $dataArray;
-    }
-
-    public function toJson($beautify = true)
-    {
-        $jsonArray = [];
-        foreach ($this->_properties as $propertyName => $value) {
-            if ($value instanceof \Carrot\Common\Model) {
-                $jsonArray[$propertyName] = $value->toArray();
-                continue;
-            }
-            if ($value instanceof \Carrot\Common\CollectionModel) {
-                $jsonArray[$propertyName] = $value->toArray();
-                continue;
-            }
-
-            $jsonArray[$propertyName] = $value;
-        }
-        return json_encode($jsonArray, $beautify ? JSON_PRETTY_PRINT : 0);
-    }
 }

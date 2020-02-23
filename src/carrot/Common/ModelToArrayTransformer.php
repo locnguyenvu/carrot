@@ -6,53 +6,48 @@ class ModelToArrayTransformer
     protected $model;
     protected $visibleFields = [];
 
-    public function __construct(Model $model) {
-        $this->model = $model;
+    public function __construct(array $configs = []) {
+        if (!empty($configs['visibleFields']) && is_array($configs['visibleFields'])) {
+            $this->setVisibleFields($configs['visibleFields']);
+        }
     }
 
-    public function setVisibleField(array $fields) : void
+    public function setVisibleFields(array $fields) : void
     {
         $this->visibleFields = $fields;
     }
 
-    public function transform() : array
+    public function transform(Model $model) : array
     {
         $dataArray = [];
-        $modelProperties = $this->model->getAllProperties();
+        $modelProperties = $model->getAllProperties();
 
         foreach ($modelProperties as $key => $value) {
             if ($value instanceof CollectionModel) {
                 $collection = [];
                 foreach ($value as $elem) {
-                    $collection[] = (new static($elem))->transform();
-                    $dataArray[$key] = $collection;
+                    $collection[] = (new static())->transform($elem);
                 }
+                $dataArray[$key] = $collection;
                 continue;
             }
             if ($value instanceof Model) {
-                $dataArray[$key] = (new static($value))->transform();
+                $dataArray[$key] = (new static())->transform($value);
                 continue;
             }
 
             $dataArray[$key] = $value;
         }
-
-        if (!empty($this->visibleFields)) {
-            return $this->visibleData($dataArray);
+        if (empty($this->visibleFields)) {
+            return $dataArray;
         }
-
-        return $dataArray;
+        return $this->filterVisibleFields($dataArray);
     }
 
-    public function filterFields(array $fields, array $source = []) {
-        if (empty($source)) {
-            $source = $this->transform();
-        }
-
-        if (empty($fields)) return $source;
-        
+    protected function filterVisibleFields(array $source) : array
+    {
         $result = [];
-        foreach ($fields as $field) {
+        foreach ($this->visibleFields as $field) {
 
             if (array_key_exists($field, $source)) {
                 $result[$field] = $source[$field];
