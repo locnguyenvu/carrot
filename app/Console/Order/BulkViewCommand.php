@@ -2,10 +2,13 @@
 namespace App\Console\Order;
 
 use Carrot\Common\{CollectionModelToJsonTransformer};
+use Carrot\Console\Traits\JsonHelpTrait;
 use Tikivn\Oms\Order\Model\Order;
 
 class BulkViewCommand extends \Carrot\Console\Command
 {
+    use JsonHelpTrait;
+
     protected static $pattern = 'order:bulk-view {codes}';
 
     private $orderRepository;

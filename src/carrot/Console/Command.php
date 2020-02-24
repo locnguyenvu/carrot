@@ -2,7 +2,8 @@
 
 namespace Carrot\Console;
 
-class Command
+
+abstract class Command
 {
     protected $app;
     protected $parser;
@@ -39,6 +40,10 @@ class Command
 
     public function run(Input\InputInterface $argvInput) : void
     {
+        if ($argvInput->hasOption('--help')) {
+            $this->renderHelp(); 
+            return;
+        }
         $this->parser->setArgvInput($argvInput);
         \call_user_func_array([$this, 'exec'], $this->parser->getArguments());
 
@@ -59,4 +64,10 @@ class Command
     {
         return $this->parser->getOption($optionName, false);
     }
+
+    public function renderHelp() : void
+    {
+        echo PHP_EOL.'Usage: '.static::$pattern.PHP_EOL;
+    }
+
 }

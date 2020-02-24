@@ -3,11 +3,14 @@ namespace App\Console\Refund;
 
 use Tikivn\Oms\Refund\Model\{RefundOrder, CollectionRefundOrder};
 use Carrot\Common\{CollectionModelToJsonTransformer};
+use Carrot\Console\Traits\JsonHelpTrait;
 use Carrot\Exception\Http\{BadRequestException};
 
 class ListByOrderCommand extends \Carrot\Console\Command
 {
-    protected static $pattern = 'refund:view-byorder {orderCodes}';
+    use JsonHelpTrait;
+
+    protected static $pattern = 'refund:list-byorder {orderCodes}';
 
     private $refundRepository;
 

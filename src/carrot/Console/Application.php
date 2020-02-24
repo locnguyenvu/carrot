@@ -8,14 +8,14 @@ class Application
     public $commands = [];
     public $aliases = [];
 
-    private $localAliases = null;
+    private $commandAliases = null;
 
     private $initialize = false;
 
     public function __construct()
     {
         $this->container = new \Carrot\Container();
-        $this->localAliases = array_flip(include_once(CONFIG_PATH.'/local_aliases.php'));
+        $this->commandAliases = array_flip(include_once(CONFIG_PATH.'/command_aliases.php'));
         $this->loadCommand();
     }
 
@@ -34,8 +34,8 @@ class Application
         $name = $command->getName();
         $this->commands[$name] = $command;
 
-        if (array_key_exists($name, $this->localAliases)) {
-            $commandAlias = $this->localAliases[$name];
+        if (array_key_exists($name, $this->commandAliases)) {
+            $commandAlias = $this->commandAliases[$name];
             $this->commands[$commandAlias] = $command;
         }
     }

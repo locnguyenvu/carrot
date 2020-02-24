@@ -13,7 +13,7 @@ class ArgvInput implements InputInterface
         if (is_null($argv)) {
             $argv = $_SERVER['argv'];
         }
-
+        
         // strip application name
         array_shift($argv);
 
@@ -46,9 +46,19 @@ class ArgvInput implements InputInterface
 
     public function readToken() : void
     {
+        $optionAliases = [];
+        if (\file_exists(CONFIG_PATH.'/option_aliases.php')) {
+            $optionAliases = include_once(CONFIG_PATH.'/option_aliases.php');
+        }
         foreach ($this->token as $stringPattern) {
             if (self::isOption($stringPattern)) {
                 $this->addOptionsByPattern($stringPattern);
+                continue;
+            }
+            if (self::isOptionAlias($stringPattern)) {
+                if (array_key_exists($stringPattern, $optionAliases)) {
+                    $this->addOptionsByPattern($optionAliases[$stringPattern]);
+                }
                 continue;
             }
             $this->arguments[] = trim($stringPattern);
@@ -60,10 +70,14 @@ class ArgvInput implements InputInterface
         return \preg_match('/\-{2}.*=*.*/', $argument);
     }
 
+    public static function isOptionAlias(string $argument) : bool
+    {
+        return \preg_match('/^\-[a-z]$/', $argument);
+    }
+
     protected function addOptionsByPattern(string $stringPattern) : void
     {
         list($key, $value) = explode('=', $stringPattern);
-        
         $this->options[$key] = empty($value) ? true : $value;
     }
 
