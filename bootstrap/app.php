@@ -16,6 +16,12 @@ return [
         ],
         'refundRepository' => [
             'class' => \Tikivn\Oms\Refund\Repository::class
+        ],
+        'pegasus_client' => [
+            'class' => \Tikivn\Pegasus\HttpClient::class
+        ],
+        'catalogRepository' => [
+            'class' => \Tikivn\Pegasus\Catalog\Repository::class
         ]
     ],
 ];

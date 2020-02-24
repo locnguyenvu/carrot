@@ -67,7 +67,7 @@ class DI
         if (isset($this->serviceAliasMap[$paramClassName])) {
             $instance = $this->get($this->serviceAliasMap[$paramClassName]);
         } else {
-            $instance = new $param->getClass();
+            $instance = new $paramClassName;
         }
         return $instance;
     }
