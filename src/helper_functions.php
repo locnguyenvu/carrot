@@ -3,47 +3,19 @@
 if (!function_exists('array_get')) {
     function array_get(array $source, string $keyStructure, $defaultValue = null)
     {
-        $tree = explode('.', $keyStructure);
-        $lastFoundValue = $source;
-        foreach ($tree as $node) {
-            if (!is_array($lastFoundValue)) {
-                return $lastFoundValue;
-            }
-            if (!isset($lastFoundValue[$node])) {
-                return $defaultValue;
-            }
-            $lastFoundValue = $lastFoundValue[$node];
-        }
-        return $lastFoundValue;
+        return \Carrot\Util\Arry::getByPath($source, $keyStructure, $defaultValue);
     }
 }
 
 if (!function_exists('array_generate')) {
     function array_generate(string $keyStructure, $value = null) 
     {
-        $dotPos = strpos($keyStructure, '.');
-        if ($dotPos > 0) {
-            return [substr($keyStructure, 0, $dotPos) => array_generate(substr($keyStructure, $dotPos + 1), $value)];
-        }
-        else return [$keyStructure => $value];
+        return \Carrot\Util\Arry::generate($keyStructure, $vaule);
     }
 }
 if (!function_exists('array_set')) {
     function array_set(&$source, $path, $value) {
-        $keys = explode('.', $path);
-        $tracker = &$source;
-
-        do {
-            $key = array_shift($keys);
-            if (!array_key_exists($key, $tracker ?? [])) {
-                $tracker[$key] = array_generate(implode('.', $keys), $value);
-            }
-            $tracker = &$tracker[$key];
-        } while(count($keys) >= 1);
-
-        if ($tracker !== $value) {
-            $tracker = $value;
-        }
+        return \Carrot\Util\Arry::setByPath($source, $path, $value);
     }
 }
 
