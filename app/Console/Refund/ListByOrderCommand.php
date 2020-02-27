@@ -4,6 +4,7 @@ namespace App\Console\Refund;
 use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
 use Carrot\Common\{ModelCollectionToJsonTransformer};
 use Carrot\Console\Traits\JsonHelpTrait;
+use Carrot\Util\Cjson;
 use Carrot\Exception\Http\{BadRequestException};
 
 class ListByOrderCommand extends \Carrot\Console\Command
@@ -31,6 +32,6 @@ class ListByOrderCommand extends \Carrot\Console\Command
             $fields = array_map('trim', explode(',',$this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
         }
-        echo $transformer->transform($resultCollection);
+        Cjson::printWithColor($transformer->transform($resultCollection));
     }
 }

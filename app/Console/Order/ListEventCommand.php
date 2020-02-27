@@ -32,11 +32,14 @@ class ListEventCommand extends \Carrot\Console\Command
         }
         do {
             $command = readline("\n>> ");
-            list($action, $param) = explode(' ', $command);
+            list($action, $param) = explode(' ', $command.' ');
             switch($action) {
                 case 'exit':
                     break;
+                case 'q':
+                    return;
                 case 'list':
+                case 'l':
                     $this->printOverviewTable($OrderEventCollection);
                     break;
                 default: 
@@ -44,7 +47,7 @@ class ListEventCommand extends \Carrot\Console\Command
                     $this->printEventById($action, $OrderEventCollection, $filterFields);
                     break;
             }
-        } while ($command != 'exit');
+        } while ($action != 'exit');
     }
 
     protected function printOverviewTable($OrderEventCollection) {

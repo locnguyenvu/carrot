@@ -77,7 +77,7 @@ class ArgvInput implements InputInterface
 
     protected function addOptionsByPattern(string $stringPattern) : void
     {
-        list($key, $value) = explode('=', $stringPattern);
+        list($key, $value) = explode('=', $stringPattern.'=');
         $this->options[$key] = empty($value) ? true : $value;
     }
 

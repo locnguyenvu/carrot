@@ -3,6 +3,7 @@ namespace App\Console\Order;
 
 use Carrot\Common\{ModelCollectionToJsonTransformer};
 use Carrot\Console\Traits\JsonHelpTrait;
+use Carrot\Util\Cjson;
 use Tikivn\Oms\Order\Model\Order;
 
 class BulkViewCommand extends \Carrot\Console\Command
@@ -27,6 +28,6 @@ class BulkViewCommand extends \Carrot\Console\Command
             $fields = array_map('trim', explode(',', $this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
         }
-        echo $transformer->transform($OrderCollection);
+        Cjson::printWithColor($transformer->transform($OrderCollection));
     }
 }

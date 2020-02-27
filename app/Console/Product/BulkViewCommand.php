@@ -2,6 +2,7 @@
 namespace App\Console\Product;
 
 use Carrot\Common\ModelCollectionToJsonTransformer;
+use Carrot\Util\Cjson;
 
 class BulkViewCommand extends \Carrot\Console\Command
 {
@@ -27,6 +28,6 @@ class BulkViewCommand extends \Carrot\Console\Command
             $fields = array_map('trim', explode(',', $this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
         }
-        echo $transformer->transform($collectionProduct);
+        Cjson::printWithColor($transformer->transform($collectionProduct));
     }
 }
