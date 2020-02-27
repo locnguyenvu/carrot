@@ -1,7 +1,7 @@
 <?php
 namespace Carrot\Common;
 
-class CollectionModelToJsonTransformer
+class ModelCollectionToJsonTransformer
 {
     private $modelToArrayTransformer;
 
@@ -9,7 +9,7 @@ class CollectionModelToJsonTransformer
     {
         $this->modelToArrayTransformer = new ModelToArrayTransformer();
         if (isset($configs['visibleFields']) && is_array($configs['visibleFields'])) {
-            $this->modelToArrayTransformer->setVisibleFields($fields);
+            $this->modelToArrayTransformer->setVisibleFields($configs['visibleFields']);
         }
     }
 
@@ -18,7 +18,7 @@ class CollectionModelToJsonTransformer
         $this->modelToArrayTransformer->setVisibleFields($fields);
     }
 
-    public function transform(CollectionModel $collection) : string
+    public function transform(ModelCollection $collection) : string
     {
         $result = [];
         foreach ($collection as $elem) {

@@ -1,7 +1,7 @@
 <?php
 namespace Carrot\Common;
 
-class CollectionModel implements \IteratorAggregate, \Countable
+class ModelCollection implements \IteratorAggregate, \Countable
 {
     protected $_data = [];
 
@@ -39,7 +39,7 @@ class CollectionModel implements \IteratorAggregate, \Countable
         return count($this->_data);
     }
 
-    public function join(CollectionModel $collection) : void
+    public function join(ModelCollection $collection) : void
     {
         foreach ($collection as $c) {
             $this->append($c);

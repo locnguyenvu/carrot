@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Refund;
 
-use Tikivn\Oms\Refund\Model\{RefundOrder, CollectionRefundOrder};
+use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
 use Carrot\Exception\Http\{BadRequestException};
 
 class CreateForCaneledOrderCommand extends \Carrot\Console\Command
@@ -16,7 +16,7 @@ class CreateForCaneledOrderCommand extends \Carrot\Console\Command
 
     public function exec($orderCodesStr) {
         $orderCodes = array_map('trim', explode(',', $orderCodesStr));
-        $result = new CollectionRefundOrder();
+        $result = new RefundOrderCollection();
         foreach ($orderCodes as $code) {
             $messageHeader = \sprintf("[%s] #%s", date('Y-m-d H:i:s'), $code);
             try {

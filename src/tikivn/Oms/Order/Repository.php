@@ -2,7 +2,7 @@
 namespace Tikivn\Oms\Order;
 
 use Tikivn\Oms\HttpClient as OmsClient;
-use Tikivn\Oms\Order\Model\{Order, CollectionOrder, CollectionOrderEvent};
+use Tikivn\Oms\Order\Model\{Order, OrderCollection, OrderEventCollection};
 
 use GuzzleHttp\Exception\{
     ClientException,
@@ -27,9 +27,9 @@ class Repository
         return $order;
     }
 
-    public function findInCodes(array $codes) : CollectionOrder
+    public function findInCodes(array $codes) : OrderCollection
     {
-        $collection = new CollectionOrder;
+        $collection = new OrderCollection;
         foreach ($codes as $code) {
                 $response = $this->omsClient->get('/v3/orders/' . $code);
                 $result = json_decode($response->getBody()->getContents(), true);
@@ -58,10 +58,10 @@ class Repository
         return $result;
     }
 
-    public function getEvents(string $code) : CollectionOrderEvent
+    public function getEvents(string $code) : OrderEventCollection
     {
         $response = $this->omsClient->get("/v3/orders/{$code}/manage/events");
         $result = json_decode($response->getBody()->getContents(), true);
-        return CollectionOrderEvent::hydrate($result);
+        return OrderEventCollection::hydrate($result);
     }
 }

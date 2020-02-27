@@ -1,10 +1,10 @@
 <?php
 namespace App\Console\Order;
 
-use Carrot\Common\{Model, CollectionModel, ModelToArrayTransformer, ModelToJsonTransformer};
+use Carrot\Common\{Model, ModelCollection, ModelToArrayTransformer, ModelToJsonTransformer};
 use Carrot\Util\Cjson;
 use LucidFrame\Console\ConsoleTable;
-use Tikivn\Oms\Order\Model\{Order, CollectionOrderEvent};
+use Tikivn\Oms\Order\Model\{Order, OrderEventCollection};
 
 class ListEventCommand extends \Carrot\Console\Command
 {
@@ -18,14 +18,14 @@ class ListEventCommand extends \Carrot\Console\Command
     }
 
     public function exec($code) {
-        $collectionOrderEvent = $this->orderRepository->getEvents($code);
+        $OrderEventCollection = $this->orderRepository->getEvents($code);
 
         if ($this->hasOption('trackFields')) {
             $trackFields = explode(',', $this->getOption('trackFields'));
-            return $this->printTrackFields($trackFields, $collectionOrderEvent);
+            return $this->printTrackFields($trackFields, $OrderEventCollection);
         }
         
-        $this->printOverviewTable($collectionOrderEvent);
+        $this->printOverviewTable($OrderEventCollection);
 
         if (!$this->hasOption('detail')) {
             return;
@@ -37,23 +37,23 @@ class ListEventCommand extends \Carrot\Console\Command
                 case 'exit':
                     break;
                 case 'list':
-                    $this->printOverviewTable($collectionOrderEvent);
+                    $this->printOverviewTable($OrderEventCollection);
                     break;
                 default: 
                     $filterFields = empty($param) ? [] : explode(',', $param);
-                    $this->printEventById($action, $collectionOrderEvent, $filterFields);
+                    $this->printEventById($action, $OrderEventCollection, $filterFields);
                     break;
             }
         } while ($command != 'exit');
     }
 
-    protected function printOverviewTable($collectionOrderEvent) {
+    protected function printOverviewTable($OrderEventCollection) {
         $table = new ConsoleTable();
         $table->addHeader('event_id')
             ->addHeader('timestamp')
             ->addHeader('action');
 
-        foreach ($collectionOrderEvent as $orderEvent) {
+        foreach ($OrderEventCollection as $orderEvent) {
             $table->addRow();
             $table->addColumn($orderEvent->getProperty('request_id'))
                 ->addColumn($orderEvent->getProperty('request_time'))
@@ -61,11 +61,11 @@ class ListEventCommand extends \Carrot\Console\Command
         }
 
         $table->display();
-        printf("\nTotal %d events", count($collectionOrderEvent));
+        printf("\nTotal %d events", count($OrderEventCollection));
     }
 
-    protected function printEventById(string $uuid, CollectionOrderEvent $collectionOrderEvent, array $filterFields = []) {
-        $event = $collectionOrderEvent->getEvent($uuid);
+    protected function printEventById(string $uuid, OrderEventCollection $OrderEventCollection, array $filterFields = []) {
+        $event = $OrderEventCollection->getEvent($uuid);
         $transformer = new ModelToJsonTransformer();
         $order = $event->getOrder();
         if (!empty($filterFields)) {
@@ -74,9 +74,9 @@ class ListEventCommand extends \Carrot\Console\Command
         Cjson::printWithColor($transformer->transform($order));
     }
 
-    protected function printTrackFields(array $trackFields, CollectionOrderEvent $collectionOrderEvent) {
+    protected function printTrackFields(array $trackFields, OrderEventCollection $OrderEventCollection) {
         echo app('console_color')->apply(['bold'], '=========================== Track fields =========================== ').PHP_EOL;
-        foreach ($collectionOrderEvent as $event) {
+        foreach ($OrderEventCollection as $event) {
             echo implode(' | ',[
                 app('console_color')->apply(['magenta'], $event->getRequestId()),
                 $event->getRequestTime(),
@@ -88,6 +88,6 @@ class ListEventCommand extends \Carrot\Console\Command
             Cjson::printWithColor($transformer->transform($order));
             print("\n");
         }
-        printf("\nTotal %d events", count($collectionOrderEvent));
+        printf("\nTotal %d events", count($OrderEventCollection));
     }
 }

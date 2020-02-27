@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Refund;
 
-use Tikivn\Oms\Refund\Model\{RefundOrder, CollectionRefundOrder};
+use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
 use Carrot\Common\ModelToJsonTransformer;
 use Carrot\Console\Traits\JsonHelpTrait;
 use Carrot\Exception\Http\{BadRequestException};

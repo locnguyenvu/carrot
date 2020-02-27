@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Order;
 
-use Carrot\Common\{CollectionModelToJsonTransformer};
+use Carrot\Common\{ModelCollectionToJsonTransformer};
 use Carrot\Console\Traits\JsonHelpTrait;
 use Tikivn\Oms\Order\Model\Order;
 
@@ -20,13 +20,13 @@ class BulkViewCommand extends \Carrot\Console\Command
 
     public function exec($codes) {
         $codes = array_map('trim', explode(',', $codes));
-        $collectionOrder = $this->orderRepository->findInCodes($codes);
+        $OrderCollection = $this->orderRepository->findInCodes($codes);
 
-        $transformer = new CollectionModelToJsonTransformer();
+        $transformer = new ModelCollectionToJsonTransformer();
         if ($this->hasOption('filterFields')) {
             $fields = array_map('trim', explode(',', $this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
         }
-        echo $transformer->transform($collectionOrder);
+        echo $transformer->transform($OrderCollection);
     }
 }

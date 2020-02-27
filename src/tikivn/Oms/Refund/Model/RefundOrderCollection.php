@@ -1,7 +1,7 @@
 <?php
 namespace Tikivn\Oms\Refund\Model;
 
-class CollectionRefundOrder extends \Carrot\Common\CollectionModel
+class RefundOrderCollection extends \Carrot\Common\ModelCollection
 {
     protected function model() : string
     {

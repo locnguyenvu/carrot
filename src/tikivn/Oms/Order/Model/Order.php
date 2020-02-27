@@ -4,8 +4,8 @@ namespace Tikivn\Oms\Order\Model;
 class Order extends \Carrot\Common\Model
 {
     public function assign($data) {
-        $collectionItems = CollectionItem::hydrate($data['items']);
-        $data['items'] = $collectionItems;
+        $ItemCollections = ItemCollection::hydrate($data['items']);
+        $data['items'] = $ItemCollections;
 
         $extraModel = new Extra($data['extra'] ?? null);
         $data['extra'] = $extraModel;

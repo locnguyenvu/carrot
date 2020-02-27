@@ -23,7 +23,7 @@ class ModelToArrayTransformer
         $modelProperties = $model->getAllProperties();
 
         foreach ($modelProperties as $key => $value) {
-            if ($value instanceof CollectionModel) {
+            if ($value instanceof ModelCollection) {
                 $collection = [];
                 foreach ($value as $elem) {
                     $collection[] = (new static())->transform($elem);
@@ -55,16 +55,16 @@ class ModelToArrayTransformer
             }
 
             if (\preg_match('/\[\]\./', $field)) {
-                list($collectionKey, $collectionItemfield) = explode('[].', $field);
+                list($collectionKey, $ItemCollectionfield) = explode('[].', $field);
                 if (!array_key_exists($collectionKey, $source) || !is_array($source[$collectionKey])) {
                     continue;
                 }
                 if (!array_key_exists($collectionKey, $result)) {
                     $result[$collectionKey] = [];
                 }
-                foreach ($source[$collectionKey] as $index => $collectionItem) {
+                foreach ($source[$collectionKey] as $index => $ItemCollection) {
                     $tmp = $result[$collectionKey][$index] ?? [];
-                    array_set($tmp, $collectionItemfield, array_get($collectionItem, $collectionItemfield));
+                    array_set($tmp, $ItemCollectionfield, array_get($ItemCollection, $ItemCollectionfield));
                     $result[$collectionKey][$index] = $tmp;
                 }
                 continue;

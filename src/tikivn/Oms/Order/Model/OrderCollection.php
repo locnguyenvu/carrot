@@ -1,7 +1,7 @@
 <?php
 namespace Tikivn\Oms\Order\Model;
 
-class CollectionOrder extends \Carrot\Common\CollectionModel
+class OrderCollection extends \Carrot\Common\ModelCollection
 {
     protected function model() : string
     {

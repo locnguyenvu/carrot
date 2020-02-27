@@ -1,8 +1,8 @@
 <?php
 namespace App\Console\Refund;
 
-use Tikivn\Oms\Refund\Model\{RefundOrder, CollectionRefundOrder};
-use Carrot\Common\{CollectionModelToJsonTransformer};
+use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
+use Carrot\Common\{ModelCollectionToJsonTransformer};
 use Carrot\Console\Traits\JsonHelpTrait;
 use Carrot\Exception\Http\{BadRequestException};
 
@@ -20,13 +20,13 @@ class ListByOrderCommand extends \Carrot\Console\Command
 
     public function exec($orderCodes) {
         $orders = array_map('trim', explode(',', $orderCodes));
-        $resultCollection = new CollectionRefundOrder();
+        $resultCollection = new RefundOrderCollection();
         foreach ($orders as $order) {
             $refunds = $this->refundRepository->findByOrderCode($order);
             $resultCollection->join($refunds);
         }
 
-        $transformer = new CollectionModelToJsonTransformer();
+        $transformer = new ModelCollectionToJsonTransformer();
         if ($this->hasOption('filterFields')) {
             $fields = array_map('trim', explode(',',$this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);

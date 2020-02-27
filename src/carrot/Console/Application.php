@@ -9,6 +9,7 @@ class Application
     public $aliases = [];
 
     private $commandAliases = null;
+    private $container;
 
     private $initialize = false;
 

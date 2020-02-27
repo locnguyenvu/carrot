@@ -17,7 +17,7 @@ class ArgvInput implements InputInterface
         // strip application name
         array_shift($argv);
 
-        $this->token = $argv;
+        $this->tokens = $argv;
         $this->readToken();
     }
 
@@ -28,7 +28,7 @@ class ArgvInput implements InputInterface
 
     public function getFirstArgument() : ?string
     {
-        return $this->token[0] ?? null;
+        return $this->tokens[0] ?? null;
     }
     
     public function getFromSecondArgument() : array
@@ -38,10 +38,10 @@ class ArgvInput implements InputInterface
 
     public function getArgumentsFromIndex(int $index) : array 
     {
-        $countToken = count($this->token);
+        $countToken = count($this->tokens);
         if ($countToken == 1) return [];
 
-        return array_slice($this->token, $index, $countToken-1);
+        return array_slice($this->tokens, $index, $countToken-1);
     }
 
     public function readToken() : void
@@ -50,7 +50,7 @@ class ArgvInput implements InputInterface
         if (\file_exists(CONFIG_PATH.'/option_aliases.php')) {
             $optionAliases = include_once(CONFIG_PATH.'/option_aliases.php');
         }
-        foreach ($this->token as $stringPattern) {
+        foreach ($this->tokens as $stringPattern) {
             if (self::isOption($stringPattern)) {
                 $this->addOptionsByPattern($stringPattern);
                 continue;

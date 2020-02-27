@@ -10,6 +10,7 @@ class DI
     private $parameters = [];
     private $binds = [];
     private $serviceStore;
+    private $serviceAliasMap = [];
 
     private $appConfigs = [];
 

@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\{
     ServerException,
     BadResponseException
 };
-use Tikivn\Oms\Refund\Model\{RefundOrder, CollectionRefundOrder};
+use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
 
 class Repository
 {
@@ -19,14 +19,14 @@ class Repository
         $this->omsClient = $omsClient;
     }
 
-    public function findByOrderCode(string $orderCode) : CollectionRefundOrder
+    public function findByOrderCode(string $orderCode) : RefundOrderCollection
     {
         $response = $this->omsClient->get("/v3/refund?order_code=in|{$orderCode}");
         $rawData = json_decode(strval($response->getBody()), true);
 
-        $collectionRefund = CollectionRefundOrder::hydrate($rawData['data']);
+        $RefundCollection = RefundOrderCollection::hydrate($rawData['data']);
 
-        return $collectionRefund;
+        return $RefundCollection;
     }
 
     public function createForCanceledOrder(string $orderCode) : ?RefundOrder

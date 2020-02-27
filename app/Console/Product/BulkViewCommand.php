@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Product;
 
-use Carrot\Common\CollectionModelToJsonTransformer;
+use Carrot\Common\ModelCollectionToJsonTransformer;
 
 class BulkViewCommand extends \Carrot\Console\Command
 {
@@ -22,7 +22,7 @@ class BulkViewCommand extends \Carrot\Console\Command
             $collectionProduct = $this->catalogRepository->findByIds($idArr);
         }
 
-        $transformer = new CollectionModelToJsonTransformer();
+        $transformer = new ModelCollectionToJsonTransformer();
         if ($this->hasOption('filterFields')) {
             $fields = array_map('trim', explode(',', $this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
