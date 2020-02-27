@@ -2,6 +2,7 @@
 namespace App\Console\Order;
 
 use Carrot\Common\{Model, CollectionModel, ModelToArrayTransformer, ModelToJsonTransformer};
+use Carrot\Util\Cjson;
 use LucidFrame\Console\ConsoleTable;
 use Tikivn\Oms\Order\Model\{Order, CollectionOrderEvent};
 
@@ -60,6 +61,7 @@ class ListEventCommand extends \Carrot\Console\Command
         }
 
         $table->display();
+        printf("\nTotal %d events", count($collectionOrderEvent));
     }
 
     protected function printEventById(string $uuid, CollectionOrderEvent $collectionOrderEvent, array $filterFields = []) {
@@ -69,7 +71,7 @@ class ListEventCommand extends \Carrot\Console\Command
         if (!empty($filterFields)) {
             $transformer->setVisibleFields($filterFields);
         }
-        echo $transformer->transform($order);
+        Cjson::printWithColor($transformer->transform($order));
     }
 
     protected function printTrackFields(array $trackFields, CollectionOrderEvent $collectionOrderEvent) {
@@ -83,7 +85,9 @@ class ListEventCommand extends \Carrot\Console\Command
             $order = $event->getOrder();
             $transformer = new \Carrot\Common\ModelToJsonTransformer();
             $transformer->setVisibleFields($trackFields);
-            echo $transformer->transform($order).PHP_EOL;
+            Cjson::printWithColor($transformer->transform($order));
+            print("\n");
         }
+        printf("\nTotal %d events", count($collectionOrderEvent));
     }
 }

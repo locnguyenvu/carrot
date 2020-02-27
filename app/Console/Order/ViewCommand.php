@@ -4,6 +4,7 @@ namespace App\Console\Order;
 use Tikivn\Oms\Order\Model\Order;
 use Carrot\Common\{ModelToJsonTransformer};
 use Carrot\Console\Traits\JsonHelpTrait;
+use Carrot\Util\Cjson;
 
 class ViewCommand extends \Carrot\Console\Command
 {
@@ -26,7 +27,7 @@ class ViewCommand extends \Carrot\Console\Command
             $filterFields = array_map('trim', explode(',', $this->getOption('filterFields', '')));
             $transformer->setVisibleFields($filterFields);
         }
-        echo $transformer->transform($order);
+        Cjson::printWithColor($transformer->transform($order));
         return;
     }
 }
