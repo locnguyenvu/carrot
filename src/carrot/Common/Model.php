@@ -15,7 +15,10 @@ class Model
             $proteryName = string_snakelize(str_replace('get', '', $name));
             return $this->getProperty($proteryName);
         }
-        \call_user_func_array([$this, $name], $args);
+        if (\method_exists($this, $name)) {
+            \call_user_func_array([$this, $name], $args);
+        }
+        throw new \BadMethodCallException();
     }
 
     public function getProperty($key) {

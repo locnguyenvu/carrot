@@ -5,6 +5,11 @@ class ModelCollection implements \IteratorAggregate, \Countable
 {
     protected $_data = [];
 
+    final public function __construct()
+    {
+
+    }
+
     protected function model() : string
     {
         $className = get_class($this);

@@ -1,8 +1,9 @@
 <?php
 namespace App\Console\Refund;
 
-use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
+use Carrot\Common\{ModelToArrayTransformer};
 use Carrot\Exception\Http\{BadRequestException};
+use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
 
 class CreateForCaneledOrderCommand extends \Carrot\Console\Command
 {
@@ -16,6 +17,14 @@ class CreateForCaneledOrderCommand extends \Carrot\Console\Command
 
     public function exec($orderCodesStr) {
         $orderCodes = array_map('trim', explode(',', $orderCodesStr));
+        $mtaTransformer = new ModelToArrayTransformer();
+        $mtaTransformer->setVisibleFields([
+            'code', 
+            'order_code',
+            'refund_amount',
+            'merchant_ref_code',
+            'created_at'
+        ]);
         $result = new RefundOrderCollection();
         foreach ($orderCodes as $code) {
             $messageHeader = \sprintf("[%s] #%s", date('Y-m-d H:i:s'), $code);
@@ -25,7 +34,7 @@ class CreateForCaneledOrderCommand extends \Carrot\Console\Command
                 $this->result[] = [
                     'order' => $code,
                     'status' => 'Success',
-                    'response' => $refundOrder->toArray()
+                    'response' => $mtaTransformer->transform($refundOrder)
                 ];
             } catch (BadRequestException $e) {
                 echo $messageHeader.' '.$e->getMessage(); 

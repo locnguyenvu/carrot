@@ -210,20 +210,21 @@ class Cjson
     }
 
     protected static function valueType(string $input) {
-        if (is_numeric($input)) {
+        $input = trim($input);
+
+        $firstChar = substr($input, 0, 1);
+
+        if (preg_match('/^\d/', $firstChar)) {
             return static::TYPE_NUMBER;
         }
-        if (preg_match('/^\[.*\]$/', $input)) {
-            return static::TYPE_ARRAY;
-        }
-        if (preg_match('/^\{.*\}$/', $input)) {
-            return static::TYPE_OBJECT;
-        }
-        if (preg_match('/^".*/', $input)) {
+        if ($firstChar == '"') {
             return static::TYPE_STRING;
         }
-        if (in_array($input, ['true', 'false'])) {
-            return static::TYPE_BOOLEAN;
+        if ($firstChar == '{') {
+            return static::TYPE_OBJECT;
+        }
+        if ($firstChar == '[') {
+            return static::TYPE_ARRAY;
         }
         return null;
     }

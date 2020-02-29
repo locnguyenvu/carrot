@@ -20,8 +20,8 @@ class ListEventCommand extends \Carrot\Console\Command
     public function exec($code) {
         $OrderEventCollection = $this->orderRepository->getEvents($code);
 
-        if ($this->hasOption('trackFields')) {
-            $trackFields = explode(',', $this->getOption('trackFields'));
+        $trackFields = $this->hasOption('trackFields') ? explode(',', $this->getOption('trackFields')) : [];
+        if (!empty($trackFields) && !$this->hasOption('detail')) {
             return $this->printTrackFields($trackFields, $OrderEventCollection);
         }
         
@@ -30,21 +30,33 @@ class ListEventCommand extends \Carrot\Console\Command
         if (!$this->hasOption('detail')) {
             return;
         }
+
         do {
             $command = readline("\n>> ");
             list($action, $param) = explode(' ', $command.' ');
+
+            $alias = [
+                'q' => 'exit',
+                'ls' => 'list',
+            ];
+            if (array_key_exists($action, $alias)) {
+                $action = $alias[$action];
+            }
             switch($action) {
                 case 'exit':
                     break;
-                case 'q':
-                    return;
                 case 'list':
-                case 'l':
                     $this->printOverviewTable($OrderEventCollection);
                     break;
+                case 'trackFields':
+                    if ($param == '*') {
+                        $trackFields = [];
+                    } else {
+                        $trackFields = explode(',', $param);
+                    }
+                    break;
                 default: 
-                    $filterFields = empty($param) ? [] : explode(',', $param);
-                    $this->printEventById($action, $OrderEventCollection, $filterFields);
+                    $this->printEventById($action, $OrderEventCollection, $trackFields);
                     break;
             }
         } while ($action != 'exit');

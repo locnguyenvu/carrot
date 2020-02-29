@@ -10,7 +10,7 @@ if (!function_exists('array_get')) {
 if (!function_exists('array_generate')) {
     function array_generate(string $keyStructure, $value = null) 
     {
-        return \Carrot\Util\Arry::generate($keyStructure, $vaule);
+        return \Carrot\Util\Arry::generate($keyStructure, $value);
     }
 }
 if (!function_exists('array_set')) {

@@ -15,6 +15,7 @@ return [
         \App\Console\Refund\CreateForCaneledOrderCommand::class,
         \App\Console\Refund\ListByOrderCommand::class,
         \App\Console\Refund\ViewCommand::class,
+        \App\Console\Refund\BulkViewCommand::class,
 
         // Product
         \App\Console\Product\BulkViewCommand::class,
