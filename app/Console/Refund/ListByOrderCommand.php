@@ -21,10 +21,10 @@ class ListByOrderCommand extends \Carrot\Console\Command
 
     public function exec($orderCodes) {
         $orders = array_map('trim', explode(',', $orderCodes));
-        $resultCollection = new RefundOrderCollection();
+        $refundCollection = new RefundOrderCollection();
         foreach ($orders as $order) {
             $refunds = $this->refundRepository->findByOrderCode($order);
-            $resultCollection->join($refunds);
+            $refundCollection = $refundCollection->join($refunds);
         }
 
         $transformer = new ModelCollectionToJsonTransformer();
@@ -32,6 +32,6 @@ class ListByOrderCommand extends \Carrot\Console\Command
             $fields = array_map('trim', explode(',',$this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
         }
-        Cjson::printWithColor($transformer->transform($resultCollection));
+        Cjson::printWithColor($transformer->transform($refundCollection));
     }
 }

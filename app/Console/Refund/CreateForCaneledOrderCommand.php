@@ -3,6 +3,7 @@ namespace App\Console\Refund;
 
 use Carrot\Common\{ModelToArrayTransformer};
 use Carrot\Exception\Http\{BadRequestException};
+use Carrot\Util\Cjson;
 use Tikivn\Oms\Refund\Model\{RefundOrder, RefundOrderCollection};
 
 class CreateForCaneledOrderCommand extends \Carrot\Console\Command
@@ -30,7 +31,7 @@ class CreateForCaneledOrderCommand extends \Carrot\Console\Command
             $messageHeader = \sprintf("[%s] #%s", date('Y-m-d H:i:s'), $code);
             try {
                 $refundOrder = $this->refundRepository->createForCanceledOrder($code);
-                echo $messageHeader.' '.app('console_color')->apply(['green'], 'Success').PHP_EOL.$refundOrder->toJson();
+                echo $messageHeader.' '.app('console_color')->apply(['green'], 'Success').' >>> '.sprintf('%s [%d]', $refundOrder->getCode(), $refundOrder->getRefundAmount());
                 $this->result[] = [
                     'order' => $code,
                     'status' => 'Success',

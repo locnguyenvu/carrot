@@ -44,10 +44,15 @@ class ModelCollection implements \IteratorAggregate, \Countable
         return count($this->_data);
     }
 
-    public function join(ModelCollection $collection) : void
+    public function join(ModelCollection $collection) : ModelCollection
     {
-        foreach ($collection as $c) {
-            $this->append($c);
+        $joinedCollection = new static;
+        foreach ($this->_data as $model) {
+            $joinedCollection->append($model);
         }
+        foreach ($collection as $model) {
+            $joinedCollection->append($model);
+        }
+        return $joinedCollection;
     }
 }
