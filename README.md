@@ -1,34 +1,16 @@
-# Project từ sự lười biếng
+# Project Carrot
 
-## Cài đặt
+## Installation
 
 ```
 $ composer install
 $ chmod +x ./carrot
+$ cp .env.dev .env
 ```
 
-Tạo file `.env`
+
+## Usage
 ```
-OMS_DOMAIN="http://oms.tiki.domain"
+./carrot 
 ```
-
-## Hướng dẫn sử dụng
-
-### Token
-#### Set token để sử dụng api service
-Command: `./carrot settoken`
-
-### Refund
-#### Tạo cho đơn hàng bị huỷ
-Command: `./carrot refund/cfco`
-
-
-### Order
-#### Reindex đơn hàng
-Command: `./carrot order/reindex`
-
-#### View đơn hàng
-Command: `./carrot order/view {orderCode}`
-
-Combine with Command-line tool and terminal JSON viewer - [antonmedv/fx](https://github.com/antonmedv/fx)
-![](https://github.com/locnguyenvu/carrot/blob/master/docs/order-view-with-fx.gif)
+![](https://github.com/locnguyenvu/carrot/blob/master/docs/image.png)
