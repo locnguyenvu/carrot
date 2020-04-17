@@ -19,5 +19,8 @@ return [
 
         // Product
         \App\Console\Product\BulkViewCommand::class,
+
+        // Utils
+        \App\Console\Utils\UuidCommand::class,
     ]
 ];
