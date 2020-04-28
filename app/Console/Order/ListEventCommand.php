@@ -20,9 +20,9 @@ class ListEventCommand extends \Carrot\Console\Command
     public function exec($code) {
         $OrderEventCollection = $this->orderRepository->getEvents($code);
 
-        $trackFields = $this->hasOption('trackFields') ? explode(',', $this->getOption('trackFields')) : [];
-        if (!empty($trackFields) && !$this->hasOption('detail')) {
-            return $this->printTrackFields($trackFields, $OrderEventCollection);
+        $filterFields = $this->hasOption('filterFields') ? explode(',', $this->getOption('filterFields')) : [];
+        if (!empty($filterFields) && !$this->hasOption('detail')) {
+            return $this->printFilterFields($filterFields, $OrderEventCollection);
         }
         
         $this->printOverviewTable($OrderEventCollection);
@@ -48,15 +48,15 @@ class ListEventCommand extends \Carrot\Console\Command
                 case 'list':
                     $this->printOverviewTable($OrderEventCollection);
                     break;
-                case 'trackFields':
+                case 'filterFields':
                     if ($param == '*') {
-                        $trackFields = [];
+                        $filterFields = [];
                     } else {
-                        $trackFields = explode(',', $param);
+                        $filterFields = explode(',', $param);
                     }
                     break;
                 default: 
-                    $this->printEventById($action, $OrderEventCollection, $trackFields);
+                    $this->printEventById($action, $OrderEventCollection, $filterFields);
                     break;
             }
         } while ($action != 'exit');
@@ -89,7 +89,7 @@ class ListEventCommand extends \Carrot\Console\Command
         Cjson::printWithColor($transformer->transform($order));
     }
 
-    protected function printTrackFields(array $trackFields, OrderEventCollection $OrderEventCollection) {
+    protected function printFilterFields(array $filterFields, OrderEventCollection $OrderEventCollection) {
         echo app('console_color')->apply(['bold'], '=========================== Track fields =========================== ').PHP_EOL;
         foreach ($OrderEventCollection as $event) {
             echo implode(' | ',[
@@ -99,7 +99,7 @@ class ListEventCommand extends \Carrot\Console\Command
             ]).PHP_EOL;
             $order = $event->getOrder();
             $transformer = new \Carrot\Common\ModelToJsonTransformer();
-            $transformer->setVisibleFields($trackFields);
+            $transformer->setVisibleFields($filterFields);
             Cjson::printWithColor($transformer->transform($order));
             print("\n");
         }

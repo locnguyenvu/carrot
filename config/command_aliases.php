@@ -11,4 +11,7 @@ return [
     'rcfco' => 'refund:create-for-caneled-order',
     'rv' => 'refund:view',
     'rlbo' => 'refund:list-byorder',
+
+    // Product
+    'pbv' => 'product:bulk-view'
 ];
