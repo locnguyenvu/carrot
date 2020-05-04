@@ -8,6 +8,19 @@ use Tikivn\Oms\Order\Model\{Order, OrderEventCollection};
 
 class ListEventCommand extends \Carrot\Console\Command
 {
+    const SUBCOMMAND_EXIT = 'exit';
+    const SUBCOMMAND_LIST = 'list';
+    const SUBCOMMAND_FILTERFIELDS = 'filterFields';
+    const SUBCOMMAND_BACKTRACE = 'backtrace';
+
+    public static $subCommands = [
+        self::SUBCOMMAND_EXIT,
+        self::SUBCOMMAND_LIST,
+        self::SUBCOMMAND_FILTERFIELDS,
+        self::SUBCOMMAND_BACKTRACE,
+    ];
+
+
     protected static $pattern = 'order:list-event {code}';
 
     private $orderRepository;
@@ -18,14 +31,14 @@ class ListEventCommand extends \Carrot\Console\Command
     }
 
     public function exec($code) {
-        $OrderEventCollection = $this->orderRepository->getEvents($code);
+        $orderEventCollection = $this->orderRepository->getEvents($code);
 
         $filterFields = $this->hasOption('filterFields') ? explode(',', $this->getOption('filterFields')) : [];
         if (!empty($filterFields) && !$this->hasOption('detail')) {
-            return $this->printFilterFields($filterFields, $OrderEventCollection);
+            return $this->printFilterFields($filterFields, $orderEventCollection);
         }
         
-        $this->printOverviewTable($OrderEventCollection);
+        $this->printOverviewTable($orderEventCollection);
 
         if (!$this->hasOption('detail')) {
             return;
@@ -33,20 +46,24 @@ class ListEventCommand extends \Carrot\Console\Command
 
         do {
             $command = readline("\n>> ");
+            $uuid = null;
             list($action, $param) = explode(' ', $command.' ');
 
             $alias = [
-                'q' => 'exit',
-                'ls' => 'list',
+                'q' => static::SUBCOMMAND_EXIT,
+                'ls' => static::SUBCOMMAND_LIST,
+                'ff' => static::SUBCOMMAND_FILTERFIELDS,
+                'bt' => static::SUBCOMMAND_BACKTRACE,
             ];
             if (array_key_exists($action, $alias)) {
                 $action = $alias[$action];
             }
+            if (!in_array($action, static::$subCommands)) { $uuid = $action; }
             switch($action) {
                 case 'exit':
                     break;
                 case 'list':
-                    $this->printOverviewTable($OrderEventCollection);
+                    $this->printOverviewTable($orderEventCollection);
                     break;
                 case 'filterFields':
                     if ($param == '*') {
@@ -55,20 +72,24 @@ class ListEventCommand extends \Carrot\Console\Command
                         $filterFields = explode(',', $param);
                     }
                     break;
-                default: 
-                    $this->printEventById($action, $OrderEventCollection, $filterFields);
+                case 'backtrace':
+                    $uuid = $param;
+                    $this->printBacktrace($uuid, $orderEventCollection);
+                    break;
+                default:
+                    $this->printEventById($uuid, $orderEventCollection, $filterFields);
                     break;
             }
         } while ($action != 'exit');
     }
 
-    protected function printOverviewTable($OrderEventCollection) {
+    protected function printOverviewTable($orderEventCollection) {
         $table = new ConsoleTable();
         $table->addHeader('event_id')
             ->addHeader('timestamp')
             ->addHeader('action');
 
-        foreach ($OrderEventCollection as $orderEvent) {
+        foreach ($orderEventCollection as $orderEvent) {
             $table->addRow();
             $table->addColumn($orderEvent->getProperty('request_id'))
                 ->addColumn($orderEvent->getProperty('request_time'))
@@ -76,11 +97,11 @@ class ListEventCommand extends \Carrot\Console\Command
         }
 
         $table->display();
-        printf("\nTotal %d events", count($OrderEventCollection));
+        printf("\nTotal %d events", count($orderEventCollection));
     }
 
-    protected function printEventById(string $uuid, OrderEventCollection $OrderEventCollection, array $filterFields = []) {
-        $event = $OrderEventCollection->getEvent($uuid);
+    protected function printEventById(string $uuid, OrderEventCollection $orderEventCollection, array $filterFields = []) {
+        $event = $orderEventCollection->getEvent($uuid);
         $transformer = new ModelToJsonTransformer();
         $order = $event->getOrder();
         if (!empty($filterFields)) {
@@ -89,9 +110,9 @@ class ListEventCommand extends \Carrot\Console\Command
         Cjson::printWithColor($transformer->transform($order));
     }
 
-    protected function printFilterFields(array $filterFields, OrderEventCollection $OrderEventCollection) {
+    protected function printFilterFields(array $filterFields, OrderEventCollection $orderEventCollection) {
         echo app('console_color')->apply(['bold'], '=========================== Track fields =========================== ').PHP_EOL;
-        foreach ($OrderEventCollection as $event) {
+        foreach ($orderEventCollection as $event) {
             echo implode(' | ',[
                 app('console_color')->apply(['magenta'], $event->getRequestId()),
                 $event->getRequestTime(),
@@ -103,6 +124,12 @@ class ListEventCommand extends \Carrot\Console\Command
             Cjson::printWithColor($transformer->transform($order));
             print("\n");
         }
-        printf("\nTotal %d events", count($OrderEventCollection));
+        printf("\nTotal %d events", count($orderEventCollection));
+    }
+
+    protected function printBackTrace(string $uuid, OrderEventCollection $orderEventCollection) : void {
+        $event = $orderEventCollection->getEvent($uuid);
+        $backTrace = $event->getBacktrace();
+        dump($backTrace);
     }
 }

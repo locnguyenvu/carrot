@@ -6,17 +6,19 @@ class OrderEvent extends \Carrot\Common\Model
     public function assign(array $data) {
         $payload = $data['payload'];
 
-        $data['action'] = $payload['action'];
-        unset($data['payload']['action']);
+        $eventData = [
+            'request_id' => $data['request_id'],
+            'request_time' => $data['request_time'],
+            'source' => $data['source'],
+            'action' => $payload['action'],
+            'changes' => $payload['changes'],
+            'backtrace' => $data['backtrace'],
+        ];
 
         $order = (new Order);
         $order->assign($payload['order']);
-        $data['order'] = $order;
-        unset($data['payload']['order']);
+        $eventData['order'] =  $order;
 
-        $data['changes'] = $payload['changes'];
-        unset($data['payload']['changes']);
-
-        parent::assign($data);
+        parent::assign($eventData);
     }
 }
