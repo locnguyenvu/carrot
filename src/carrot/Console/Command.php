@@ -70,4 +70,8 @@ abstract class Command
         echo PHP_EOL.'Usage: '.static::$pattern.PHP_EOL;
     }
 
+    public static function printErrorAndExit($message) : void {
+        echo app('console_color')->apply(['red'], $message);
+        die;
+    }
 }

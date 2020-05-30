@@ -22,5 +22,8 @@ return [
 
         // Utils
         \App\Console\Utils\UuidCommand::class,
+
+        // Sql Generator
+        \App\Console\SqlGenerator\TransferOrderPaymentTransactionCommand::class 
     ]
 ];
