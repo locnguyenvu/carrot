@@ -19,7 +19,7 @@ class TransferOrderPaymentTransactionCommand extends \Carrot\Console\Command {
         $originalOrder = $this->orderRepository->findByCode($originalOrderCode);
         $receivedOrder = $this->orderRepository->findByCode($receivedOrderCode);
 
-        if($originalOrder->getProperty('payment.status') != 'success') {
+        if(!in_array($originalOrder->getProperty('payment.status'), ['success', 'pending'])) {
             self::printErrorAndExit(sprintf('Đơn hàng #%s chưa ghi nhận thanh toán thành công', $originalOrderCode));
         };
         if($receivedOrder->getProperty('payment.status') == 'success') {
@@ -158,7 +158,7 @@ EOD;
     public static function getFirstSuccessTransaction($originalOrder) : ?array {
         $transactions = $originalOrder->getTransactions();
         foreach($transactions as $trans) {
-            if ($trans['state'] == 'success') {
+            if ($trans['state'] == 'success' || $trans['state'] == 'pending') {
                 return $trans;
             }
         }
