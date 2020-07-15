@@ -28,6 +28,10 @@ class BulkViewCommand extends \Carrot\Console\Command
             $fields = array_map('trim', explode(',', $this->getOption('filterFields')));
             $transformer->setVisibleFields($fields);
         }
-        Cjson::printWithColor($transformer->transform($OrderCollection));
+        if ($this->hasOption('nocolor')) {
+            echo $transformer->transform($OrderCollection);
+        } else {
+            Cjson::printWithColor($transformer->transform($OrderCollection));
+        }
     }
 }

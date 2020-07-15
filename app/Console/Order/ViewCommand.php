@@ -27,7 +27,12 @@ class ViewCommand extends \Carrot\Console\Command
             $filterFields = array_map('trim', explode(',', $this->getOption('filterFields', '')));
             $transformer->setVisibleFields($filterFields);
         }
-        Cjson::printWithColor($transformer->transform($order));
+
+        if ($this->hasOption('nocolor')) {
+            echo $transformer->transform($order);
+        } else {
+            Cjson::printWithColor($transformer->transform($order));
+        }
         return;
     }
 }
