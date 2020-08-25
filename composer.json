@@ -1,8 +1,13 @@
 {
-    "name": "ngynvuloc/carrot",
+    "name": "locnguyenvu/carrot",
     "description": "Lazy scripts",
     "type": "project",
-    "version": "dev-master",
+    "repository": [
+        {
+            "type": "vsc",
+            "url": "https://github.com/locnguyenvu/carrot"
+        }
+    ],
     "require": {
         "guzzlehttp/guzzle": "^6.4",
         "vlucas/phpdotenv": "^4.0",
