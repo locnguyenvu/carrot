@@ -2,6 +2,7 @@
     "name": "ngynvuloc/carrot",
     "description": "Lazy scripts",
     "type": "project",
+    "version": "dev-master",
     "require": {
         "guzzlehttp/guzzle": "^6.4",
         "vlucas/phpdotenv": "^4.0",
