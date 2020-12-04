@@ -64,7 +64,7 @@ class DI
     }
 
     private function constructParam(\ReflectionParameter $param) {
-        $paramClassName = $param->getClass()->name;
+        $paramClassName = $param->getType()->getName();
         if (isset($this->serviceAliasMap[$paramClassName])) {
             $instance = $this->get($this->serviceAliasMap[$paramClassName]);
         } else {

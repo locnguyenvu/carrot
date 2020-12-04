@@ -1,0 +1,12 @@
+dev:
+    oms: 
+        domain: http://oms.dev.tiki.services
+    pegasus:
+        domain: http://pegasus.dev.tiki.services
+    token_file: token/dev
+prod:
+    oms: 
+        domain: http://oms.tiki.services
+    pegasus:
+        domain: http://pegasus.tiki.services
+    token_file: token/prod

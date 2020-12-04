@@ -5,6 +5,7 @@ class ModelToArrayTransformer
 {
     protected $model;
     protected $visibleFields = [];
+    protected $filterConditions = [];
 
     public function __construct(array $configs = []) {
         if (!empty($configs['visibleFields']) && is_array($configs['visibleFields'])) {
