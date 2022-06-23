@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.4",
+        "guzzlehttp/guzzle": "^6.5.8",
         "vlucas/phpdotenv": "^4.0",
         "jakub-onderka/php-console-color": "^0.2.0",
         "phplucidframe/console-table": "^1.2",
